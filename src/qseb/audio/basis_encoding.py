@@ -14,10 +14,10 @@ implementation of QRDA, FRQA, or QPAM.
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from math import ceil, log2
 from numbers import Integral
-from typing import Iterable, Mapping, Sequence
 
 from qiskit import QuantumCircuit, QuantumRegister, transpile
 from qiskit.quantum_info import Statevector
