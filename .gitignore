@@ -64,6 +64,15 @@ results/*
 !results/audio/noise_sensitivity/noise_sensitivity_runs.csv
 !results/audio/noise_sensitivity/noise_sensitivity_summary.csv
 
+# Calibration-derived hardware-noise benchmark
+!results/audio/hardware_noise/
+!results/audio/hardware_noise/README.md
+!results/audio/hardware_noise/backend_calibration.csv
+!results/audio/hardware_noise/hardware_noise.json
+!results/audio/hardware_noise/hardware_noise_layout_summary.csv
+!results/audio/hardware_noise/hardware_noise_runs.csv
+!results/audio/hardware_noise/hardware_noise_summary.csv
+
 figures/*
 !figures/.gitkeep
 !figures/audio/
@@ -99,10 +108,19 @@ figures/*
 !figures/audio/noise_sensitivity/joint_distribution_tvd.png
 !figures/audio/noise_sensitivity/modal_amplitude_accuracy.png
 
+# Calibration-derived hardware-noise figures
+!figures/audio/hardware_noise/
+!figures/audio/hardware_noise/correct_basis_shot_fraction.png
+!figures/audio/hardware_noise/exact_reconstruction_rate.png
+!figures/audio/hardware_noise/joint_distribution_tvd.png
+!figures/audio/hardware_noise/layout_sensitivity.png
+!figures/audio/hardware_noise/modal_amplitude_accuracy.png
+
 # Local handoff archives
 resource_scaling_outputs*.zip
 shot_sensitivity_outputs*.zip
 noise_sensitivity_outputs*.zip
+hardware_noise_outputs*.zip
 
 # Local or large data
 data/*

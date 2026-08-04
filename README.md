@@ -37,6 +37,7 @@ This implementation is intentionally **not labeled QRDA**. QRDA will be added se
 - Controlled resource-scaling benchmark
 - Controlled shot-sensitivity benchmark with exact theoretical reference
 - Controlled synthetic gate and readout noise benchmark
+- Calibration-derived hardware-noise benchmark with layout analysis
 - Unit tests and continuous integration
 - Executable Python example and Jupyter notebook
 - Method documentation and research roadmap
@@ -276,6 +277,63 @@ python benchmarks/audio/run_basis_noise_sensitivity.py
 > These are controlled synthetic stress tests. They are not hardware results and
 > are not derived from a particular backend calibration.
 
+
+## Calibration-derived hardware-noise benchmark
+
+The final simulation-based robustness benchmark uses `FakeNairobiV2`, a historical
+seven-qubit backend snapshot, to construct an approximate Aer device-noise model.
+It evaluates ideal, readout-only, gate-plus-thermal, and full-calibration conditions
+across five transpiler layouts and three simulator seeds.
+
+The hardware-mapped circuit expanded sharply with signal length:
+
+| Samples | Logical qubits | Mean depth | Mean two-qubit gates |
+|---:|---:|---:|---:|
+| 4 | 6 | 188.0 | 92.8 |
+| 8 | 7 | 751.8 | 432.6 |
+
+Readout-only noise retained correct-state fractions near
+**0.861** and
+**0.855** for four and eight samples.
+Gate-plus-thermal noise reduced them to
+**0.451** and
+**0.087**, respectively.
+
+![Correct basis states under calibration-derived noise](figures/audio/hardware_noise/correct_basis_shot_fraction.png)
+
+The four-sample circuit retained exact modal reconstruction under the full model, but
+only **0.397** of measured basis states
+were correct and joint TVD reached **0.603**.
+The eight-sample circuit failed exact reconstruction in every full-calibration run,
+with mean modal accuracy **0.158**.
+
+![Modal reconstruction under calibration-derived noise](figures/audio/hardware_noise/modal_amplitude_accuracy.png)
+
+Layout selection had a measurable effect for the six-logical-qubit circuit, but very
+limited effect for the seven-logical-qubit circuit because it occupies the entire
+backend.
+
+![Hardware-layout sensitivity](figures/audio/hardware_noise/layout_sensitivity.png)
+
+Detailed results and documentation:
+
+- [`results/audio/hardware_noise/README.md`](results/audio/hardware_noise/README.md)
+- [`results/audio/hardware_noise/hardware_noise_summary.csv`](results/audio/hardware_noise/hardware_noise_summary.csv)
+- [`results/audio/hardware_noise/hardware_noise_layout_summary.csv`](results/audio/hardware_noise/hardware_noise_layout_summary.csv)
+- [`results/audio/hardware_noise/backend_calibration.csv`](results/audio/hardware_noise/backend_calibration.csv)
+- [`results/audio/hardware_noise/hardware_noise.json`](results/audio/hardware_noise/hardware_noise.json)
+- [`docs/audio/calibration_hardware_noise_benchmark.md`](docs/audio/calibration_hardware_noise_benchmark.md)
+- [`docs/audio/calibration_hardware_noise_analysis.md`](docs/audio/calibration_hardware_noise_analysis.md)
+
+Reproduce the benchmark with:
+
+```bash
+python benchmarks/audio/run_basis_calibration_hardware_noise.py
+```
+
+> This experiment uses a historical backend snapshot in simulation. It is not a
+> live calibration and not a real-QPU execution.
+
 ## Research questions
 
 This repository is designed to answer questions such as:
@@ -371,6 +429,12 @@ Run the controlled synthetic-noise benchmark:
 python benchmarks/audio/run_basis_noise_sensitivity.py
 ```
 
+Run the calibration-derived hardware-noise benchmark:
+
+```bash
+python benchmarks/audio/run_basis_calibration_hardware_noise.py
+```
+
 Minimal Python usage:
 
 ```python
@@ -414,7 +478,8 @@ Generated results should not be committed without the corresponding script, conf
 | Benchmarking | Controlled resource scaling | ✅ Implemented |
 | Benchmarking | Shot sensitivity | ✅ Implemented |
 | Benchmarking | Synthetic noise sensitivity | ✅ Implemented |
-| Benchmarking | Calibration-derived hardware noise | ⏳ Planned |
+| Benchmarking | Calibration-derived hardware noise | ✅ Implemented |
+| Benchmarking | Real-QPU execution | ⏳ Future extension |
 | Audio representations | QRDA | ⏳ Planned |
 | Audio representations | FRQA | ⏳ Planned |
 | Audio representations | QPAM / SQPAM | ⏳ Planned |
