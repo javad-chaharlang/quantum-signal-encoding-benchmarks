@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Quantum Signal Encoding Benchmarks"
+type: software
+authors:
+  - family-names: "Chaharlang"
+    given-names: "Javad"
+repository-code: "https://github.com/javad-chaharlang/quantum-signal-encoding-benchmarks"
+url: "https://github.com/javad-chaharlang/quantum-signal-encoding-benchmarks"
+version: 0.1.0
+date-released: 2026-08-04
+license: Apache-2.0
+keywords:
+  - quantum signal processing
+  - quantum audio
+  - quantum image representation
+  - Qiskit
+  - reproducible research
+abstract: >-
+  Reproducible Qiskit implementations and benchmarks for representing classical
+  audio and image signals in quantum states, including reconstruction, circuit
+  resources, shot sensitivity, and noise analysis.

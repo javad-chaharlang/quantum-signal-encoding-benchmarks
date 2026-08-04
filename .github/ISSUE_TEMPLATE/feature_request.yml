@@ -1,0 +1,30 @@
+name: Method or benchmark proposal
+about: Propose a new encoding, benchmark, or analysis
+title: "[Proposal]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Scientific motivation
+      description: What research question would this addition address?
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Primary source
+      description: Provide the paper title, DOI, or other primary reference.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope
+      description: Describe state preparation, decoding, tests, and benchmarks.
+    validations:
+      required: true
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Anticipated limitations

@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-signal-encoding-benchmarks"
+version = "0.1.0"
+description = "Reproducible Qiskit implementations and benchmarks for quantum audio and image representations."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [
+  {name = "Javad Chaharlang", email = "javad.chaharlang@iau.ac.ir"}
+]
+keywords = [
+  "quantum computing",
+  "qiskit",
+  "quantum signal processing",
+  "quantum audio",
+  "quantum image representation",
+  "reproducible research",
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  "numpy>=1.26,<3",
+  "qiskit>=2.4,<3",
+  "qiskit-aer>=0.17,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<10",
+  "pytest-cov>=5,<8",
+  "ruff>=0.9,<1",
+]
+notebook = [
+  "jupyter>=1.1,<2",
+  "matplotlib>=3.8,<4",
+]
+
+[project.urls]
+Homepage = "https://github.com/javad-chaharlang/quantum-signal-encoding-benchmarks"
+Repository = "https://github.com/javad-chaharlang/quantum-signal-encoding-benchmarks"
+Issues = "https://github.com/javad-chaharlang/quantum-signal-encoding-benchmarks/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --cov=qseb --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

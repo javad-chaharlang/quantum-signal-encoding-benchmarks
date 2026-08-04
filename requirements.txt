@@ -1,0 +1,4 @@
+# Runtime dependencies. For development, prefer: pip install -e ".[dev,notebook]"
+numpy>=1.26,<3
+qiskit>=2.4,<3
+qiskit-aer>=0.17,<1

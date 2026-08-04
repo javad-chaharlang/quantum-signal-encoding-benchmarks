@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Linters and type checkers
+.ruff_cache/
+.mypy_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated research artifacts
+results/*
+!results/.gitkeep
+figures/*
+!figures/.gitkeep
+
+# Local or large data
+data/*
+!data/.gitkeep
+*.wav
+*.flac
+*.mp3
+*.nii
+*.nii.gz
+*.dcm
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+qiskit-ibm.json
