@@ -36,6 +36,7 @@ This implementation is intentionally **not labeled QRDA**. QRDA will be added se
 - Circuit resource reporting
 - Controlled resource-scaling benchmark
 - Controlled shot-sensitivity benchmark with exact theoretical reference
+- Controlled synthetic gate and readout noise benchmark
 - Unit tests and continuous integration
 - Executable Python example and Jupyter notebook
 - Method documentation and research roadmap
@@ -220,6 +221,61 @@ python benchmarks/audio/run_basis_shot_sensitivity.py
 > These results isolate ideal finite-shot sampling. They do not include gate noise,
 > readout noise, backend topology, calibration drift, or real-hardware execution.
 
+
+## Controlled synthetic-noise benchmark
+
+The fourth reproducible experiment evaluates synthetic gate depolarization,
+symmetric readout error, and their combination. It contains **130 noisy simulations**
+and **26 aggregated conditions** for four- and eight-sample signals.
+
+The eight-sample circuit was substantially larger:
+
+| Samples | Total qubits | Transpiled depth | CX count |
+|---:|---:|---:|---:|
+| 4 | 6 | 95 | 54 |
+| 8 | 7 | 454 | 236 |
+
+At moderate gate noise, the correct-state fraction was
+**0.711** for four
+samples but only **0.251**
+for eight samples. Moderate readout noise retained approximately
+**0.941** for the
+eight-sample circuit, showing that accumulated gate errors dominate this benchmark.
+
+![Correct basis states under noise](figures/audio/noise_sensitivity/correct_basis_shot_fraction.png)
+
+For eight samples, modal amplitude accuracy remained one through moderate gate noise
+and then fell to **0.300**
+at the high level and **0.050**
+at the severe level.
+
+![Modal amplitude accuracy under noise](figures/audio/noise_sensitivity/modal_amplitude_accuracy.png)
+
+A key negative result is that four-sample exact reconstruction remained perfect even
+when severe gate noise reduced the correct-state fraction to
+**0.222** and increased
+joint TVD to **0.778**.
+Therefore, exact modal reconstruction alone can hide substantial distribution
+corruption.
+
+Detailed results and documentation:
+
+- [`results/audio/noise_sensitivity/README.md`](results/audio/noise_sensitivity/README.md)
+- [`results/audio/noise_sensitivity/noise_sensitivity_summary.csv`](results/audio/noise_sensitivity/noise_sensitivity_summary.csv)
+- [`results/audio/noise_sensitivity/noise_sensitivity_runs.csv`](results/audio/noise_sensitivity/noise_sensitivity_runs.csv)
+- [`results/audio/noise_sensitivity/noise_sensitivity.json`](results/audio/noise_sensitivity/noise_sensitivity.json)
+- [`docs/audio/noise_sensitivity_benchmark.md`](docs/audio/noise_sensitivity_benchmark.md)
+- [`docs/audio/noise_sensitivity_analysis.md`](docs/audio/noise_sensitivity_analysis.md)
+
+Reproduce the benchmark with:
+
+```bash
+python benchmarks/audio/run_basis_noise_sensitivity.py
+```
+
+> These are controlled synthetic stress tests. They are not hardware results and
+> are not derived from a particular backend calibration.
+
 ## Research questions
 
 This repository is designed to answer questions such as:
@@ -309,6 +365,12 @@ Run the shot-sensitivity benchmark:
 python benchmarks/audio/run_basis_shot_sensitivity.py
 ```
 
+Run the controlled synthetic-noise benchmark:
+
+```bash
+python benchmarks/audio/run_basis_noise_sensitivity.py
+```
+
 Minimal Python usage:
 
 ```python
@@ -351,7 +413,8 @@ Generated results should not be committed without the corresponding script, conf
 | Audio foundations | Reproducible visual experiment | ✅ Implemented |
 | Benchmarking | Controlled resource scaling | ✅ Implemented |
 | Benchmarking | Shot sensitivity | ✅ Implemented |
-| Benchmarking | Noise sensitivity | ⏳ Planned |
+| Benchmarking | Synthetic noise sensitivity | ✅ Implemented |
+| Benchmarking | Calibration-derived hardware noise | ⏳ Planned |
 | Audio representations | QRDA | ⏳ Planned |
 | Audio representations | FRQA | ⏳ Planned |
 | Audio representations | QPAM / SQPAM | ⏳ Planned |

@@ -57,6 +57,13 @@ results/*
 !results/audio/shot_sensitivity/shot_sensitivity_runs.csv
 !results/audio/shot_sensitivity/shot_sensitivity_summary.csv
 
+# Controlled synthetic-noise benchmark
+!results/audio/noise_sensitivity/
+!results/audio/noise_sensitivity/README.md
+!results/audio/noise_sensitivity/noise_sensitivity.json
+!results/audio/noise_sensitivity/noise_sensitivity_runs.csv
+!results/audio/noise_sensitivity/noise_sensitivity_summary.csv
+
 figures/*
 !figures/.gitkeep
 !figures/audio/
@@ -84,9 +91,18 @@ figures/*
 !figures/audio/shot_sensitivity/mean_time_index_coverage.png
 !figures/audio/shot_sensitivity/time_distribution_tvd.png
 
+# Controlled synthetic-noise figures
+!figures/audio/noise_sensitivity/
+!figures/audio/noise_sensitivity/amplitude_bit_error_rate.png
+!figures/audio/noise_sensitivity/correct_basis_shot_fraction.png
+!figures/audio/noise_sensitivity/exact_reconstruction_rate.png
+!figures/audio/noise_sensitivity/joint_distribution_tvd.png
+!figures/audio/noise_sensitivity/modal_amplitude_accuracy.png
+
 # Local handoff archives
 resource_scaling_outputs*.zip
 shot_sensitivity_outputs*.zip
+noise_sensitivity_outputs*.zip
 
 # Local or large data
 data/*
@@ -105,4 +121,3 @@ data/*
 *.key
 credentials.json
 qiskit-ibm.json
-*.rar

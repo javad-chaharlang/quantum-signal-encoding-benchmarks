@@ -18,7 +18,10 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Controlled shot-sensitivity experiment
 - [x] Exact full-coverage probability and theoretical shot thresholds
 - [x] Monte Carlo confidence intervals and Qiskit validation
-- [ ] Noise-model experiment
+- [x] Controlled synthetic noise-model experiment
+- [x] Gate, readout, and combined error families
+- [x] Reconstruction, bit-error, and distribution metrics
+- [ ] Calibration-derived backend noise model
 - [ ] Hardware-aware transpilation study
 
 ### 2. QRDA
@@ -63,7 +66,8 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [ ] Qubit and ancilla counts across methods
 - [ ] State-preparation complexity comparison
 - [x] Shot sensitivity for the basis-encoded baseline
-- [ ] Noise sensitivity
+- [x] Synthetic noise sensitivity for the basis-encoded baseline
+- [ ] Backend-calibration and hardware noise sensitivity
 - [ ] Reconstruction fidelity and error
 - [ ] Reproducible cross-method benchmark report
 
@@ -89,6 +93,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - **v0.1:** Basis-encoded audio foundation
 - **v0.1.1:** Controlled resource-scaling benchmark
 - **v0.1.2:** Shot-sensitivity and full-coverage benchmark
+- **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.2:** Exact QRDA implementation
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR
