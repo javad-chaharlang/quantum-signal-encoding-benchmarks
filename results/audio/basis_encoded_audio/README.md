@@ -20,9 +20,12 @@
 
 ![Original and reconstructed samples](../../../figures/audio/basis_encoded_audio/reconstruction.png)
 
-## Circuit
+## Colored Qiskit circuit
 
-![Basis-encoded audio circuit](../../../figures/audio/basis_encoded_audio/circuit.png)
+![Colored basis-encoded audio circuit](../../../figures/audio/basis_encoded_audio/circuit_colored.png)
+
+A scalable vector version is available at
+`figures/audio/basis_encoded_audio/circuit_colored.svg`.
 
 ## Measurement distribution
 

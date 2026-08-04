@@ -1,15 +1,18 @@
 # Generating the First Reproducible Audio Experiment
 
-This experiment creates the first visual and machine-readable evidence for the
+This experiment creates visual and machine-readable evidence for the
 basis-encoded quantum audio implementation.
 
-## Install the visualization dependency
+## Install the project and visualization dependencies
 
 From the repository root:
 
 ```bash
-pip install -e ".[notebook]"
+pip install -e ".[dev,notebook]"
 ```
+
+The `notebook` extra installs Matplotlib and `pylatexenc`, which are required by
+the Qiskit Matplotlib circuit drawer.
 
 ## Run the experiment
 
@@ -21,7 +24,8 @@ python examples/audio/generate_basis_audio_assets.py
 
 ```text
 figures/audio/basis_encoded_audio/
-├── circuit.png
+├── circuit_colored.png
+├── circuit_colored.svg
 ├── measurement_counts.png
 └── reconstruction.png
 
@@ -37,6 +41,9 @@ The run uses:
 - Shots: `4096`
 - Simulator seed: `42`
 - Transpiler optimization level: `1`
+
+The PNG circuit is intended for GitHub and LinkedIn. The SVG circuit is intended
+for high-resolution viewing, publication figures, and later editing.
 
 All generated results are tied to the script and fixed configuration so the
 experiment can be reproduced.

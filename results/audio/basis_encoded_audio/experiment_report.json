@@ -24,6 +24,12 @@
   ],
   "exact_reconstruction": true,
   "experiment": "basis_encoded_quantum_audio",
+  "figure_files": {
+    "circuit_png": "figures/audio/basis_encoded_audio/circuit_colored.png",
+    "circuit_svg": "figures/audio/basis_encoded_audio/circuit_colored.svg",
+    "measurement_counts": "figures/audio/basis_encoded_audio/measurement_counts.png",
+    "reconstruction": "figures/audio/basis_encoded_audio/reconstruction.png"
+  },
   "input_samples": [
     3,
     6,

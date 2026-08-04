@@ -66,9 +66,9 @@ The original and reconstructed samples are identical under ideal shot-based simu
 
 ### Quantum circuit
 
-The preparation circuit places the time register in uniform superposition and writes each quantized amplitude into the amplitude register using controlled operations.
+The preparation circuit places the time register in uniform superposition and writes each quantized amplitude into the amplitude register using controlled operations. The figure is rendered with Qiskit's Matplotlib drawer and a publication-style custom color scheme.
 
-![Basis-encoded quantum audio circuit](figures/audio/basis_encoded_audio/circuit.png)
+![Colored basis-encoded quantum audio circuit](figures/audio/basis_encoded_audio/circuit_colored.png)
 
 ### Measurement distribution
 
@@ -84,6 +84,8 @@ The following figure shows the observed computational-basis states from 4,096 sh
 | Raw circuit size | 17 |
 | Transpiled depth | 77 |
 | Transpiled size | 118 |
+
+A scalable SVG version is available at `figures/audio/basis_encoded_audio/circuit_colored.svg`.
 
 The complete configuration, interpretation, and machine-readable results are available in:
 

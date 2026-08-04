@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
+from qiskit.visualization import circuit_drawer
 
 from qseb.audio import (
     build_basis_encoded_audio_circuit,
@@ -25,34 +26,69 @@ OPTIMIZATION_LEVEL = 1
 FIGURE_DIR = Path("figures/audio/basis_encoded_audio")
 RESULT_DIR = Path("results/audio/basis_encoded_audio")
 
+CIRCUIT_STYLE = {
+    "name": "iqp",
+    "backgroundcolor": "#FFFFFF",
+    "textcolor": "#111827",
+    "subtextcolor": "#374151",
+    "linecolor": "#1F2937",
+    "creglinecolor": "#64748B",
+    "gatetextcolor": "#FFFFFF",
+    "gatefacecolor": "#7C3AED",
+    "barrierfacecolor": "#CBD5E1",
+    "fontsize": 13,
+    "subfontsize": 9,
+    "displaycolor": {
+        "h": ("#EF4444", "#FFFFFF"),
+        "x": ("#2563EB", "#FFFFFF"),
+        "cx": ("#2563EB", "#FFFFFF"),
+        "ccx": ("#7C3AED", "#FFFFFF"),
+        "mcx": ("#7C3AED", "#FFFFFF"),
+        "barrier": ("#CBD5E1", "#334155"),
+    },
+}
+
 
 def _ensure_output_directories() -> None:
     FIGURE_DIR.mkdir(parents=True, exist_ok=True)
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def _remove_legacy_circuit_files() -> None:
+    """Remove older black-and-white circuit files to prevent confusion."""
+
+    for filename in ("circuit.png", "circuit.svg"):
+        path = FIGURE_DIR / filename
+        if path.exists():
+            path.unlink()
+
+
 def _save_circuit_figure(circuit: Any) -> tuple[Path, Path]:
-    """Save graphical circuit figures in PNG and SVG formats."""
+    """Save publication-style Qiskit circuit figures as PNG and SVG."""
 
-    png_output_path = FIGURE_DIR / "circuit.png"
-    svg_output_path = FIGURE_DIR / "circuit.svg"
+    png_output_path = FIGURE_DIR / "circuit_colored.png"
+    svg_output_path = FIGURE_DIR / "circuit_colored.svg"
 
-    figure = circuit.draw(
+    figure = circuit_drawer(
+        circuit,
         output="mpl",
-        style="iqp",
+        style=CIRCUIT_STYLE,
         fold=-1,
-        scale=0.9,
+        scale=1.0,
         plot_barriers=True,
         idle_wires=False,
+        vertical_compression="low",
     )
+
+    if figure is None:
+        raise RuntimeError("Qiskit did not return a Matplotlib circuit figure")
 
     figure.savefig(
         png_output_path,
-        dpi=300,
+        dpi=350,
         bbox_inches="tight",
         facecolor="white",
     )
-
     figure.savefig(
         svg_output_path,
         bbox_inches="tight",
@@ -153,6 +189,14 @@ def _write_json_report(
         "exact_basis_probabilities": _serializable_probabilities(probabilities),
         "measurement_counts": dict(sorted(counts.items())),
         "resource_metrics": resources,
+        "figure_files": {
+            "circuit_png": "figures/audio/basis_encoded_audio/circuit_colored.png",
+            "circuit_svg": "figures/audio/basis_encoded_audio/circuit_colored.svg",
+            "reconstruction": "figures/audio/basis_encoded_audio/reconstruction.png",
+            "measurement_counts": (
+                "figures/audio/basis_encoded_audio/measurement_counts.png"
+            ),
+        },
     }
 
     output_path = RESULT_DIR / "experiment_report.json"
@@ -191,9 +235,12 @@ def _write_markdown_summary(
 
 ![Original and reconstructed samples](../../../figures/audio/basis_encoded_audio/reconstruction.png)
 
-## Circuit
+## Colored Qiskit circuit
 
-![Basis-encoded audio circuit](../../../figures/audio/basis_encoded_audio/circuit.png)
+![Colored basis-encoded audio circuit](../../../figures/audio/basis_encoded_audio/circuit_colored.png)
+
+A scalable vector version is available at
+`figures/audio/basis_encoded_audio/circuit_colored.svg`.
 
 ## Measurement distribution
 
@@ -226,6 +273,7 @@ advantage. The next benchmark should study scaling, finite-shot coverage, and no
 
 def main() -> None:
     _ensure_output_directories()
+    _remove_legacy_circuit_files()
 
     circuit, spec = build_basis_encoded_audio_circuit(
         SAMPLES,

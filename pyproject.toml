@@ -45,6 +45,7 @@ dev = [
 notebook = [
   "jupyter>=1.1,<2",
   "matplotlib>=3.8,<4",
+  "pylatexenc>=2.10,<3",
 ]
 
 [project.urls]
