@@ -14,9 +14,13 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 The initial release provides a complete educational and testable implementation of a **basis-encoded quantum audio representation**:
 
-\[
-|A\rangle = \frac{1}{\sqrt{N}} \sum_{t=0}^{N-1} |a_t\rangle_{\mathrm{amp}} |t\rangle_{\mathrm{time}},
-\]
+```math
+|A\rangle =
+\frac{1}{\sqrt{N}}
+\sum_{t=0}^{N-1}
+|a_t\rangle_{\mathrm{amp}}
+|t\rangle_{\mathrm{time}}.
+```
 
 where each quantized audio amplitude \(a_t\) is stored in an amplitude register and each sample index \(t\) is stored in a time register.
 
