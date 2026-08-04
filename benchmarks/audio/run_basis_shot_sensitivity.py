@@ -112,8 +112,7 @@ def _write_json(
             "num_monte_carlo_seeds": len(SEEDS),
             "amplitude_bits": AMPLITUDE_BITS,
             "ideal_sampling_model": (
-                "uniform time-index multinomial derived from the exact "
-                "basis-encoded state"
+                "uniform time-index multinomial derived from the exact basis-encoded state"
             ),
             "qiskit_validation_cases": [
                 {
@@ -144,11 +143,7 @@ def _rows_for_samples(
     num_samples: int,
 ) -> list[dict[str, object]]:
     return sorted(
-        (
-            row
-            for row in summary_rows
-            if int(row["num_samples"]) == num_samples
-        ),
+        (row for row in summary_rows if int(row["num_samples"]) == num_samples),
         key=lambda row: int(row["shots"]),
     )
 
@@ -161,14 +156,8 @@ def _plot_exact_reconstruction(
     for num_samples in SAMPLE_COUNTS:
         rows = _rows_for_samples(summary_rows, num_samples)
         shots = [int(row["shots"]) for row in rows]
-        empirical = [
-            float(row["empirical_exact_reconstruction_rate"])
-            for row in rows
-        ]
-        theoretical = [
-            float(row["theoretical_full_coverage_probability"])
-            for row in rows
-        ]
+        empirical = [float(row["empirical_exact_reconstruction_rate"]) for row in rows]
+        theoretical = [float(row["theoretical_full_coverage_probability"]) for row in rows]
 
         # Floating-point rounding can occasionally produce a tiny negative
         # difference (for example, -1e-17) even though a Wilson interval
@@ -177,16 +166,14 @@ def _plot_exact_reconstruction(
         lower_errors = [
             max(
                 0.0,
-                empirical[index]
-                - float(rows[index]["exact_rate_wilson_95_low"]),
+                empirical[index] - float(rows[index]["exact_rate_wilson_95_low"]),
             )
             for index in range(len(rows))
         ]
         upper_errors = [
             max(
                 0.0,
-                float(rows[index]["exact_rate_wilson_95_high"])
-                - empirical[index],
+                float(rows[index]["exact_rate_wilson_95_high"]) - empirical[index],
             )
             for index in range(len(rows))
         ]
@@ -230,13 +217,8 @@ def _plot_coverage(
     for num_samples in SAMPLE_COUNTS:
         rows = _rows_for_samples(summary_rows, num_samples)
         shots = [int(row["shots"]) for row in rows]
-        empirical = [
-            float(row["coverage_fraction_mean"]) for row in rows
-        ]
-        theoretical = [
-            float(row["theoretical_expected_coverage_fraction"])
-            for row in rows
-        ]
+        empirical = [float(row["coverage_fraction_mean"]) for row in rows]
+        theoretical = [float(row["theoretical_expected_coverage_fraction"]) for row in rows]
 
         axis.plot(
             shots,
@@ -274,13 +256,8 @@ def _plot_missing_indices(
     for num_samples in SAMPLE_COUNTS:
         rows = _rows_for_samples(summary_rows, num_samples)
         shots = [int(row["shots"]) for row in rows]
-        empirical = [
-            float(row["missing_indices_mean"]) for row in rows
-        ]
-        theoretical = [
-            float(row["theoretical_expected_missing_indices"])
-            for row in rows
-        ]
+        empirical = [float(row["missing_indices_mean"]) for row in rows]
+        theoretical = [float(row["theoretical_expected_missing_indices"]) for row in rows]
 
         axis.plot(
             shots,
@@ -375,10 +352,7 @@ def _selected_summary_markdown(
 ) -> str:
     selected_shots = (32, 64, 128, 256)
     lines = [
-        (
-            "| Samples | Shots | Empirical exact rate | Theory | "
-            "Mean coverage | Mean missing |"
-        ),
+        ("| Samples | Shots | Empirical exact rate | Theory | Mean coverage | Mean missing |"),
         "|---:|---:|---:|---:|---:|---:|",
     ]
 
@@ -392,12 +366,8 @@ def _selected_summary_markdown(
                 [
                     str(row["num_samples"]),
                     str(row["shots"]),
-                    _format_probability(
-                        row["empirical_exact_reconstruction_rate"]
-                    ),
-                    _format_probability(
-                        row["theoretical_full_coverage_probability"]
-                    ),
+                    _format_probability(row["empirical_exact_reconstruction_rate"]),
+                    _format_probability(row["theoretical_full_coverage_probability"]),
                     _format_probability(row["coverage_fraction_mean"]),
                     f"{float(row['missing_indices_mean']):.3f}",
                 ]

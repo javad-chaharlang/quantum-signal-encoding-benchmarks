@@ -18,9 +18,7 @@ from qseb.audio import (
 )
 from qseb.benchmarks.resource_scaling import generate_profile_samples
 
-DEFAULT_SHOT_SENSITIVITY_SEEDS = tuple(
-    42 + (10 * index) for index in range(50)
-)
+DEFAULT_SHOT_SENSITIVITY_SEEDS = tuple(42 + (10 * index) for index in range(50))
 
 
 def _is_power_of_two(value: int) -> bool:
@@ -61,9 +59,7 @@ def full_coverage_probability(num_samples: int, shots: int) -> float:
             updated[observed] += probability * (observed / num_samples)
 
             if observed < num_samples:
-                updated[observed + 1] += probability * (
-                    (num_samples - observed) / num_samples
-                )
+                updated[observed + 1] += probability * ((num_samples - observed) / num_samples)
 
         probabilities = updated
 
@@ -105,8 +101,7 @@ def minimum_shots_for_probability(
             return shots
 
     raise RuntimeError(
-        f"target probability {target_probability} was not reached by "
-        f"{maximum_shots} shots"
+        f"target probability {target_probability} was not reached by {maximum_shots} shots"
     )
 
 
@@ -129,9 +124,7 @@ def simulate_ideal_shot_case(
     missing_indices = num_samples - observed_indices
     coverage_fraction = observed_indices / num_samples
     empirical_distribution = time_counts / shots
-    total_variation_distance = 0.5 * float(
-        np.abs(empirical_distribution - probabilities).sum()
-    )
+    total_variation_distance = 0.5 * float(np.abs(empirical_distribution - probabilities).sum())
 
     mean_count = shots / num_samples
     count_standard_deviation = float(np.std(time_counts, ddof=0))
@@ -224,10 +217,7 @@ def _wilson_interval(
     center = (estimate + (z_squared / (2.0 * trials))) / denominator
     margin = (
         z_value
-        * sqrt(
-            (estimate * (1.0 - estimate) / trials)
-            + (z_squared / (4.0 * trials**2))
-        )
+        * sqrt((estimate * (1.0 - estimate) / trials) + (z_squared / (4.0 * trials**2)))
         / denominator
     )
 
@@ -249,25 +239,17 @@ def aggregate_shot_sensitivity_rows(
 
     for (num_samples, shots), group in sorted(groups.items()):
         runs = len(group)
-        exact_successes = sum(
-            1 for row in group if bool(row["exact_reconstruction"])
-        )
+        exact_successes = sum(1 for row in group if bool(row["exact_reconstruction"]))
         empirical_exact_rate = exact_successes / runs
         confidence_low, confidence_high = _wilson_interval(
             exact_successes,
             runs,
         )
 
-        coverage_values = [
-            float(row["coverage_fraction"]) for row in group
-        ]
+        coverage_values = [float(row["coverage_fraction"]) for row in group]
         missing_values = [float(row["missing_indices"]) for row in group]
-        tvd_values = [
-            float(row["time_distribution_tvd"]) for row in group
-        ]
-        coefficient_values = [
-            float(row["count_coefficient_of_variation"]) for row in group
-        ]
+        tvd_values = [float(row["time_distribution_tvd"]) for row in group]
+        coefficient_values = [float(row["count_coefficient_of_variation"]) for row in group]
 
         theoretical_full_coverage = full_coverage_probability(
             num_samples,
@@ -294,30 +276,18 @@ def aggregate_shot_sensitivity_rows(
                 "exact_rate_wilson_95_low": confidence_low,
                 "exact_rate_wilson_95_high": confidence_high,
                 "theoretical_full_coverage_probability": theoretical_full_coverage,
-                "exact_rate_absolute_error": abs(
-                    empirical_exact_rate - theoretical_full_coverage
-                ),
+                "exact_rate_absolute_error": abs(empirical_exact_rate - theoretical_full_coverage),
                 "coverage_fraction_mean": mean(coverage_values),
-                "coverage_fraction_std": (
-                    stdev(coverage_values) if runs > 1 else 0.0
-                ),
-                "theoretical_expected_coverage_fraction": (
-                    theoretical_expected_coverage
-                ),
+                "coverage_fraction_std": (stdev(coverage_values) if runs > 1 else 0.0),
+                "theoretical_expected_coverage_fraction": (theoretical_expected_coverage),
                 "coverage_mean_absolute_error": abs(
                     mean(coverage_values) - theoretical_expected_coverage
                 ),
                 "missing_indices_mean": mean(missing_values),
-                "missing_indices_std": (
-                    stdev(missing_values) if runs > 1 else 0.0
-                ),
-                "theoretical_expected_missing_indices": (
-                    theoretical_expected_missing
-                ),
+                "missing_indices_std": (stdev(missing_values) if runs > 1 else 0.0),
+                "theoretical_expected_missing_indices": (theoretical_expected_missing),
                 "time_distribution_tvd_mean": mean(tvd_values),
-                "time_distribution_tvd_std": (
-                    stdev(tvd_values) if runs > 1 else 0.0
-                ),
+                "time_distribution_tvd_std": (stdev(tvd_values) if runs > 1 else 0.0),
                 "count_coefficient_of_variation_mean": mean(coefficient_values),
                 "count_coefficient_of_variation_std": (
                     stdev(coefficient_values) if runs > 1 else 0.0

@@ -101,9 +101,7 @@ def _write_rows_csv(rows: list[dict[str, object]]) -> Path:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow(
-                {key: _serialize_csv_value(value) for key, value in row.items()}
-            )
+            writer.writerow({key: _serialize_csv_value(value) for key, value in row.items()})
 
     return output_path
 
@@ -194,9 +192,7 @@ def _plot_profile_metric(
         )
         x_values = [int(row[x_key]) for row in profile_rows]
         means = [float(row[f"{metric}_mean"]) for row in profile_rows]
-        standard_deviations = [
-            float(row[f"{metric}_std"]) for row in profile_rows
-        ]
+        standard_deviations = [float(row[f"{metric}_std"]) for row in profile_rows]
 
         if profile == "random":
             axis.errorbar(
@@ -289,17 +285,10 @@ def _summary_row(
     x_value: int,
 ) -> dict[str, object]:
     for row in rows:
-        if (
-            row["study"] == study
-            and row["profile"] == profile
-            and int(row[x_key]) == x_value
-        ):
+        if row["study"] == study and row["profile"] == profile and int(row[x_key]) == x_value:
             return row
 
-    raise ValueError(
-        f"missing summary row: study={study}, profile={profile}, "
-        f"{x_key}={x_value}"
-    )
+    raise ValueError(f"missing summary row: study={study}, profile={profile}, {x_key}={x_value}")
 
 
 def _write_markdown(summary_rows: list[dict[str, object]]) -> Path:
@@ -360,13 +349,11 @@ def _write_markdown(summary_rows: list[dict[str, object]]) -> Path:
         x_value=max(AMPLITUDE_WIDTHS),
     )
 
-    random_depth_growth = (
-        float(random_length_end["transpiled_depth_mean"])
-        / float(random_length_start["transpiled_depth_mean"])
+    random_depth_growth = float(random_length_end["transpiled_depth_mean"]) / float(
+        random_length_start["transpiled_depth_mean"]
     )
-    random_cx_growth = (
-        float(random_length_end["transpiled_cx_count_mean"])
-        / float(random_length_start["transpiled_cx_count_mean"])
+    random_cx_growth = float(random_length_end["transpiled_cx_count_mean"]) / float(
+        random_length_start["transpiled_cx_count_mean"]
     )
     dense_depth_per_bit = (
         float(dense_amplitude_end["transpiled_depth_mean"])

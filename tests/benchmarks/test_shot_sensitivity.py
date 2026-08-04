@@ -50,9 +50,7 @@ def test_ideal_shot_case_is_reproducible() -> None:
     )
 
     assert first == second
-    assert first["exact_reconstruction"] == (
-        first["missing_indices"] == 0
-    )
+    assert first["exact_reconstruction"] == (first["missing_indices"] == 0)
 
 
 def test_shot_case_rejects_invalid_arguments() -> None:

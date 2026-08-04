@@ -193,9 +193,7 @@ def _write_json_report(
             "circuit_png": "figures/audio/basis_encoded_audio/circuit_colored.png",
             "circuit_svg": "figures/audio/basis_encoded_audio/circuit_colored.svg",
             "reconstruction": "figures/audio/basis_encoded_audio/reconstruction.png",
-            "measurement_counts": (
-                "figures/audio/basis_encoded_audio/measurement_counts.png"
-            ),
+            "measurement_counts": ("figures/audio/basis_encoded_audio/measurement_counts.png"),
         },
     }
 
