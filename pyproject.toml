@@ -69,3 +69,4 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+exclude = ["*.ipynb"]
