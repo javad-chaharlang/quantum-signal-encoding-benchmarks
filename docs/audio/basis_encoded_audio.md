@@ -6,37 +6,54 @@ Implemented in v0.1.0 as a transparent baseline. This method is **not QRDA, FRQA
 
 ## Classical input
 
-Let a quantized digital audio signal contain \(N=2^n\) unsigned integer samples:
+Let a quantized digital audio signal contain $N=2^n$ unsigned integer samples:
 
-\[
-\mathbf{a} = [a_0, a_1, \ldots, a_{N-1}],
-\qquad 0 \leq a_t < 2^m.
-\]
+```math
+\mathbf{a}
+=
+[a_0,a_1,\ldots,a_{N-1}],
+\qquad
+0 \leq a_t < 2^m.
+```
 
 The representation uses:
 
-- \(n=\log_2 N\) time qubits
-- \(m\) amplitude qubits
-- \(n+m\) data qubits in total
+- $n=\log_2 N$ time qubits
+- $m$ amplitude qubits
+- $n+m$ data qubits in total
 
 ## Quantum state
 
 The prepared state is
 
-\[
-|A\rangle = \frac{1}{\sqrt{N}}
-\sum_{t=0}^{N-1}|a_t\rangle_{\mathrm{amp}}|t\rangle_{\mathrm{time}}.
-\]
+```math
+|A\rangle
+=
+\frac{1}{\sqrt{N}}
+\sum_{t=0}^{N-1}
+|a_t\rangle_{\mathrm{amp}}
+|t\rangle_{\mathrm{time}}.
+```
 
 The time register is first placed in a uniform superposition. Multi-controlled bit flips then write the binary amplitude associated with each time basis state into the amplitude register.
 
 ## Register convention
 
-Within each register, qubit \(i\) stores binary bit \(i\), following a little-endian indexing convention. In the full circuit, amplitude qubits precede time qubits. Therefore, the computational-basis integer corresponding to \((t,a_t)\) is
+Within each register, qubit $i$ stores binary bit $i$, following a little-endian indexing convention. In the full circuit, amplitude qubits precede time qubits.
 
-\[
-\mathrm{index} = a_t + (t \ll m).
-\]
+Therefore, the computational-basis integer corresponding to $(t,a_t)$ is
+
+```math
+\mathrm{index}
+=
+a_t+t\,2^m.
+```
+
+The equivalent bit-shift expression in Python is:
+
+```python
+basis_index = amplitude + (time_index << amplitude_bits)
+```
 
 This convention is tested explicitly through exact statevector probabilities.
 
@@ -46,8 +63,8 @@ This convention is tested explicitly through exact statevector probabilities.
 2. Validate unsigned integer quantization.
 3. Allocate amplitude and time registers.
 4. Apply Hadamard gates to every time qubit.
-5. For each sample index \(t\), convert zero-valued control bits into positive controls with temporary \(X\) gates.
-6. Apply controlled or multi-controlled \(X\) gates to write each non-zero amplitude bit.
+5. For each sample index $t$, convert zero-valued control bits into positive controls with temporary $X$ gates.
+6. Apply controlled or multi-controlled $X$ gates to write each non-zero amplitude bit.
 7. Restore temporary control inversions.
 
 ## Reconstruction
