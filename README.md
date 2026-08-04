@@ -22,8 +22,7 @@ The initial release provides a complete educational and testable implementation 
 |t\rangle_{\mathrm{time}}.
 ```
 
-where each quantized audio amplitude \(a_t\) is stored in an amplitude register and each sample index \(t\) is stored in a time register.
-
+where each quantized audio amplitude $a_t$ is stored in an amplitude register and each sample index $t$ is stored in a time register.
 This implementation is intentionally **not labeled QRDA**. QRDA will be added separately after reproducing its exact state definition and experimental protocol from the primary literature.
 
 ### Included
