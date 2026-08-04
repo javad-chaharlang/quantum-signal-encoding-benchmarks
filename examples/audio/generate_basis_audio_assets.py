@@ -31,32 +31,36 @@ def _ensure_output_directories() -> None:
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def _save_circuit_figure(circuit: Any) -> Path:
-    circuit_text = str(circuit.draw(output="text", fold=120))
-    lines = circuit_text.splitlines()
-    max_width = max((len(line) for line in lines), default=80)
+def _save_circuit_figure(circuit: Any) -> tuple[Path, Path]:
+    """Save graphical circuit figures in PNG and SVG formats."""
 
-    figure_width = min(20.0, max(10.0, max_width * 0.105))
-    figure_height = max(4.0, len(lines) * 0.32)
+    png_output_path = FIGURE_DIR / "circuit.png"
+    svg_output_path = FIGURE_DIR / "circuit.svg"
 
-    figure, axis = plt.subplots(figsize=(figure_width, figure_height))
-    axis.axis("off")
-    axis.text(
-        0.01,
-        0.99,
-        circuit_text,
-        family="monospace",
-        fontsize=9,
-        horizontalalignment="left",
-        verticalalignment="top",
-        transform=axis.transAxes,
+    figure = circuit.draw(
+        output="mpl",
+        style="iqp",
+        fold=-1,
+        scale=0.9,
+        plot_barriers=True,
+        idle_wires=False,
     )
-    figure.tight_layout()
 
-    output_path = FIGURE_DIR / "circuit.png"
-    figure.savefig(output_path, dpi=220, bbox_inches="tight")
+    figure.savefig(
+        png_output_path,
+        dpi=300,
+        bbox_inches="tight",
+        facecolor="white",
+    )
+
+    figure.savefig(
+        svg_output_path,
+        bbox_inches="tight",
+        facecolor="white",
+    )
+
     plt.close(figure)
-    return output_path
+    return png_output_path, svg_output_path
 
 
 def _save_reconstruction_figure(
@@ -240,8 +244,11 @@ def main() -> None:
         optimization_level=OPTIMIZATION_LEVEL,
     )
 
+    circuit_png_path, circuit_svg_path = _save_circuit_figure(circuit)
+
     generated_paths = [
-        _save_circuit_figure(circuit),
+        circuit_png_path,
+        circuit_svg_path,
         _save_reconstruction_figure(SAMPLES, reconstructed),
         _save_counts_figure(counts),
         _write_json_report(
