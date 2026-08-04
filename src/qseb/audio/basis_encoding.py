@@ -214,9 +214,9 @@ def decode_measurement_counts(
     for raw_bitstring, count in counts.items():
         compact = raw_bitstring.replace(" ", "")
         if len(compact) != expected_width:
-            raise ValueError(
-                f"bitstring {raw_bitstring!r} has width {len(compact)}; "
-                f"expected {expected_width}"
+    raise ValueError(
+        f"bitstring {raw_bitstring!r} has width {len(compact)}; expected {expected_width}"
+    )
             )
         if set(compact) - {"0", "1"}:
             raise ValueError(f"invalid measurement bitstring: {raw_bitstring!r}")
