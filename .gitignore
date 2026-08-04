@@ -105,3 +105,4 @@ data/*
 *.key
 credentials.json
 qiskit-ibm.json
+*.rar
