@@ -1,0 +1,77 @@
+{
+  "amplitude_bits": 3,
+  "exact_basis_probabilities": [
+    {
+      "amplitude": 3,
+      "probability": 0.2499999999999999,
+      "time_index": 0
+    },
+    {
+      "amplitude": 6,
+      "probability": 0.2499999999999999,
+      "time_index": 1
+    },
+    {
+      "amplitude": 2,
+      "probability": 0.2499999999999999,
+      "time_index": 2
+    },
+    {
+      "amplitude": 5,
+      "probability": 0.2499999999999999,
+      "time_index": 3
+    }
+  ],
+  "exact_reconstruction": true,
+  "experiment": "basis_encoded_quantum_audio",
+  "input_samples": [
+    3,
+    6,
+    2,
+    5
+  ],
+  "measurement_counts": {
+    "00011": 992,
+    "01110": 1030,
+    "10010": 1061,
+    "11101": 1013
+  },
+  "optimization_level": 1,
+  "reconstructed_samples": [
+    3,
+    6,
+    2,
+    5
+  ],
+  "resource_metrics": {
+    "basis_gates": [
+      "rz",
+      "sx",
+      "x",
+      "cx"
+    ],
+    "num_qubits": 5,
+    "optimization_level": 1,
+    "raw_depth": 13,
+    "raw_operations": {
+      "barrier": 2,
+      "ccx": 7,
+      "h": 2,
+      "x": 8
+    },
+    "raw_size": 17,
+    "transpiled_depth": 77,
+    "transpiled_operations": {
+      "barrier": 2,
+      "cx": 42,
+      "rz": 62,
+      "sx": 8,
+      "x": 6
+    },
+    "transpiled_size": 118
+  },
+  "seed_simulator": 42,
+  "shots": 4096,
+  "time_bits": 2,
+  "total_qubits": 5
+}
