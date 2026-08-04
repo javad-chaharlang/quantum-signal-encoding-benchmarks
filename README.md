@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![Research Software](https://img.shields.io/badge/Research-Reproducible-informational.svg)](#reproducibility)
 
-A reproducible research repository for implementing and benchmarking **quantum representations of classical signals** with Qiskit. The project begins with quantum audio and image encoding, then develops toward hybrid quantum–classical medical imaging and secure quantum multimedia processing.
+A reproducible research repository for implementing and benchmarking **quantum representations of classical signals** with Qiskit. The project begins with quantum audio and image encoding, then develops toward hybrid quantum-classical medical imaging and secure quantum multimedia processing.
 
 > **Research principle:** an encoding method is not considered complete until its state definition, circuit preparation, decoding procedure, reconstruction accuracy, resource requirements, and noise sensitivity are documented.
 
@@ -23,6 +23,7 @@ The initial release provides a complete educational and testable implementation 
 ```
 
 where each quantized audio amplitude $a_t$ is stored in an amplitude register and each sample index $t$ is stored in a time register.
+
 This implementation is intentionally **not labeled QRDA**. QRDA will be added separately after reproducing its exact state definition and experimental protocol from the primary literature.
 
 ### Included
@@ -36,6 +37,67 @@ This implementation is intentionally **not labeled QRDA**. QRDA will be added se
 - Unit tests and continuous integration
 - Executable Python example and Jupyter notebook
 - Method documentation and research roadmap
+
+## First reproducible experiment
+
+The first complete experiment encodes and reconstructs the quantized audio signal:
+
+```python
+samples = [3, 6, 2, 5]
+```
+
+The experiment uses:
+
+| Item | Value |
+|---|---:|
+| Amplitude qubits | 3 |
+| Time qubits | 2 |
+| Total qubits | 5 |
+| Measurement shots | 4096 |
+| Simulator seed | 42 |
+| Optimization level | 1 |
+| Exact reconstruction | ✅ True |
+
+### Signal reconstruction
+
+The original and reconstructed samples are identical under ideal shot-based simulation.
+
+![Original and reconstructed samples](figures/audio/basis_encoded_audio/reconstruction.png)
+
+### Quantum circuit
+
+The preparation circuit places the time register in uniform superposition and writes each quantized amplitude into the amplitude register using controlled operations.
+
+![Basis-encoded quantum audio circuit](figures/audio/basis_encoded_audio/circuit.png)
+
+### Measurement distribution
+
+The following figure shows the observed computational-basis states from 4,096 shots.
+
+![Measurement counts](figures/audio/basis_encoded_audio/measurement_counts.png)
+
+### Circuit resources
+
+| Metric | Value |
+|---|---:|
+| Raw circuit depth | 13 |
+| Raw circuit size | 17 |
+| Transpiled depth | 77 |
+| Transpiled size | 118 |
+
+The complete configuration, interpretation, and machine-readable results are available in:
+
+- [`results/audio/basis_encoded_audio/README.md`](results/audio/basis_encoded_audio/README.md)
+- [`results/audio/basis_encoded_audio/experiment_report.json`](results/audio/basis_encoded_audio/experiment_report.json)
+- [`examples/audio/generate_basis_audio_assets.py`](examples/audio/generate_basis_audio_assets.py)
+
+Reproduce the full experiment with:
+
+```bash
+python examples/audio/generate_basis_audio_assets.py
+```
+
+> This experiment verifies correctness and reproducibility for a small ideal simulation. It does **not** claim quantum advantage. The next benchmarks will study scaling, finite-shot coverage, transpilation cost, and noise sensitivity.
 
 ## Research questions
 
@@ -59,8 +121,8 @@ quantum-signal-encoding-benchmarks/
 ├── tests/audio/              # Unit and reconstruction tests
 ├── benchmarks/               # Resource, noise, and scalability experiments
 ├── data/                     # Small public/example inputs only
-├── results/                  # Generated benchmark tables
-├── figures/                  # Generated plots and circuit figures
+├── results/                  # Selected reproducible benchmark reports
+├── figures/                  # Selected reproducible plots and circuit figures
 └── .github/workflows/        # Continuous integration
 ```
 
@@ -100,17 +162,17 @@ pip install -e ".[dev,notebook]"
 
 ## Quick start
 
+Run the compact command-line demonstration:
+
 ```bash
 python examples/audio/basis_encoding_demo.py
 ```
 
-The demonstration encodes the signal:
+Run the complete reproducible experiment and regenerate all figures and reports:
 
-```python
-samples = [3, 6, 2, 5]
+```bash
+python examples/audio/generate_basis_audio_assets.py
 ```
-
-using two time qubits and three amplitude qubits, simulates the measured circuit, reconstructs the samples, and reports circuit resources.
 
 Minimal Python usage:
 
@@ -150,16 +212,17 @@ Generated results should not be committed without the corresponding script, conf
 
 | Phase | Method or topic | Status |
 |---|---|---|
-| Audio foundations | Basis-encoded audio | ✅ Implemented |
+| Audio foundations | Basis-encoded audio implementation | ✅ Implemented |
+| Audio foundations | Reproducible visual experiment | ✅ Implemented |
+| Benchmarking | Resource scaling | ⏳ Next |
+| Benchmarking | Shot sensitivity | ⏳ Planned |
+| Benchmarking | Noise sensitivity | ⏳ Planned |
 | Audio representations | QRDA | ⏳ Planned |
 | Audio representations | FRQA | ⏳ Planned |
 | Audio representations | QPAM / SQPAM | ⏳ Planned |
 | Image representations | FRQI | ⏳ Planned |
 | Image representations | NEQR | ⏳ Planned |
 | Image representations | QPIE / amplitude encoding | ⏳ Planned |
-| Benchmarking | Resource scaling | ⏳ Planned |
-| Benchmarking | Shot sensitivity | ⏳ Planned |
-| Benchmarking | Noise sensitivity | ⏳ Planned |
 | Applications | Hybrid quantum medical imaging | 🔭 Future phase |
 | Applications | Secure quantum multimedia processing | 🔭 Future phase |
 
