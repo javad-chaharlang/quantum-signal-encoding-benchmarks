@@ -267,6 +267,7 @@ def decode_measurement_counts(
 
     return dict(decoded)
 
+
 def reconstruct_from_counts(
     counts: Mapping[str, int],
     spec: AudioEncodingSpec,
