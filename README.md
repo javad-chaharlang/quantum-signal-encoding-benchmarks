@@ -35,6 +35,7 @@ This implementation is intentionally **not labeled QRDA**. QRDA will be added se
 - Measurement decoding and signal reconstruction
 - Circuit resource reporting
 - Controlled resource-scaling benchmark
+- Controlled shot-sensitivity benchmark with exact theoretical reference
 - Unit tests and continuous integration
 - Executable Python example and Jupyter notebook
 - Method documentation and research roadmap
@@ -164,6 +165,61 @@ python benchmarks/audio/run_basis_resource_scaling.py
 > quantum advantage, hardware feasibility, execution fidelity, or asymptotic
 > optimality.
 
+
+## Shot-sensitivity benchmark
+
+The third reproducible experiment evaluates finite-shot reconstruction for signals
+with **4, 8, 16, and 32 samples** across shot counts from **4 to 4096**. It includes
+**2,200 Monte Carlo runs**, **44 aggregated conditions**, exact theoretical
+full-coverage probabilities, Wilson 95% intervals, and representative Qiskit Aer
+encode-measure-decode validations.
+
+For the present ideal basis encoding, an observed time index reveals its amplitude
+deterministically. Exact reconstruction therefore requires every time index to be
+observed at least once.
+
+### Theoretical shot requirements
+
+| Samples | Shots for ≥95% exact reconstruction | Shots for ≥99% exact reconstruction |
+|---:|---:|---:|
+| 4 | 16 | 21 |
+| 8 | 38 | 51 |
+| 16 | 90 | 115 |
+| 32 | 203 | 255 |
+
+All **44 theoretical probabilities** fell inside the corresponding empirical Wilson
+95% confidence intervals. The maximum absolute empirical/theoretical mean-coverage
+error was only **0.0301**.
+
+![Exact reconstruction probability versus shots](figures/audio/shot_sensitivity/exact_reconstruction_probability.png)
+
+The mean coverage curves also closely followed the exact expectation. Importantly,
+high mean coverage does not guarantee complete reconstruction: even one unobserved
+time index leaves the signal incomplete.
+
+![Mean time-index coverage versus shots](figures/audio/shot_sensitivity/mean_time_index_coverage.png)
+
+Both actual Qiskit validation cases achieved complete coverage, correct observed
+amplitudes, and exact signal reconstruction.
+
+Detailed results and documentation:
+
+- [`results/audio/shot_sensitivity/README.md`](results/audio/shot_sensitivity/README.md)
+- [`results/audio/shot_sensitivity/shot_sensitivity_summary.csv`](results/audio/shot_sensitivity/shot_sensitivity_summary.csv)
+- [`results/audio/shot_sensitivity/shot_sensitivity_runs.csv`](results/audio/shot_sensitivity/shot_sensitivity_runs.csv)
+- [`results/audio/shot_sensitivity/shot_sensitivity.json`](results/audio/shot_sensitivity/shot_sensitivity.json)
+- [`docs/audio/shot_sensitivity_benchmark.md`](docs/audio/shot_sensitivity_benchmark.md)
+- [`docs/audio/shot_sensitivity_analysis.md`](docs/audio/shot_sensitivity_analysis.md)
+
+Reproduce the benchmark with:
+
+```bash
+python benchmarks/audio/run_basis_shot_sensitivity.py
+```
+
+> These results isolate ideal finite-shot sampling. They do not include gate noise,
+> readout noise, backend topology, calibration drift, or real-hardware execution.
+
 ## Research questions
 
 This repository is designed to answer questions such as:
@@ -247,6 +303,12 @@ Run the controlled resource-scaling benchmark:
 python benchmarks/audio/run_basis_resource_scaling.py
 ```
 
+Run the shot-sensitivity benchmark:
+
+```bash
+python benchmarks/audio/run_basis_shot_sensitivity.py
+```
+
 Minimal Python usage:
 
 ```python
@@ -288,7 +350,7 @@ Generated results should not be committed without the corresponding script, conf
 | Audio foundations | Basis-encoded audio implementation | ✅ Implemented |
 | Audio foundations | Reproducible visual experiment | ✅ Implemented |
 | Benchmarking | Controlled resource scaling | ✅ Implemented |
-| Benchmarking | Shot sensitivity | ⏳ Planned |
+| Benchmarking | Shot sensitivity | ✅ Implemented |
 | Benchmarking | Noise sensitivity | ⏳ Planned |
 | Audio representations | QRDA | ⏳ Planned |
 | Audio representations | FRQA | ⏳ Planned |

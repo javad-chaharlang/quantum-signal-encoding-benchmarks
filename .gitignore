@@ -50,6 +50,13 @@ results/*
 !results/audio/resource_scaling/resource_scaling_runs.csv
 !results/audio/resource_scaling/resource_scaling_summary.csv
 
+# Shot-sensitivity benchmark
+!results/audio/shot_sensitivity/
+!results/audio/shot_sensitivity/README.md
+!results/audio/shot_sensitivity/shot_sensitivity.json
+!results/audio/shot_sensitivity/shot_sensitivity_runs.csv
+!results/audio/shot_sensitivity/shot_sensitivity_summary.csv
+
 figures/*
 !figures/.gitkeep
 !figures/audio/
@@ -70,8 +77,16 @@ figures/*
 !figures/audio/resource_scaling/length_transpiled_cx_profiles.png
 !figures/audio/resource_scaling/length_transpiled_depth_profiles.png
 
+# Shot-sensitivity figures
+!figures/audio/shot_sensitivity/
+!figures/audio/shot_sensitivity/exact_reconstruction_probability.png
+!figures/audio/shot_sensitivity/mean_missing_time_indices.png
+!figures/audio/shot_sensitivity/mean_time_index_coverage.png
+!figures/audio/shot_sensitivity/time_distribution_tvd.png
+
 # Local handoff archives
 resource_scaling_outputs*.zip
+shot_sensitivity_outputs*.zip
 
 # Local or large data
 data/*

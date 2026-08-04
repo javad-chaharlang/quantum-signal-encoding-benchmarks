@@ -15,7 +15,9 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Controlled signal-length and amplitude-resolution scaling study
 - [x] Sparse, repeated-random, and dense loading profiles
 - [x] Raw and basis-transpiled depth, size, and CX accounting
-- [ ] Shot-sensitivity experiment
+- [x] Controlled shot-sensitivity experiment
+- [x] Exact full-coverage probability and theoretical shot thresholds
+- [x] Monte Carlo confidence intervals and Qiskit validation
 - [ ] Noise-model experiment
 - [ ] Hardware-aware transpilation study
 
@@ -60,7 +62,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [ ] Unified experiment configuration across encoding methods
 - [ ] Qubit and ancilla counts across methods
 - [ ] State-preparation complexity comparison
-- [ ] Shot sensitivity
+- [x] Shot sensitivity for the basis-encoded baseline
 - [ ] Noise sensitivity
 - [ ] Reconstruction fidelity and error
 - [ ] Reproducible cross-method benchmark report
@@ -86,6 +88,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 
 - **v0.1:** Basis-encoded audio foundation
 - **v0.1.1:** Controlled resource-scaling benchmark
+- **v0.1.2:** Shot-sensitivity and full-coverage benchmark
 - **v0.2:** Exact QRDA implementation
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR
