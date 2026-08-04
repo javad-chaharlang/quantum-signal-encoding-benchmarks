@@ -55,12 +55,16 @@ def _validate_samples(
     amplitude_bits: int | None,
 ) -> tuple[tuple[int, ...], AudioEncodingSpec]:
     values = tuple(samples)
+
     if not values:
         raise ValueError("samples must contain at least one value")
+
     if not _is_power_of_two(len(values)):
         raise ValueError("the number of samples must be a power of two")
+
     if any(not isinstance(value, Integral) for value in values):
         raise TypeError("all samples must be integers after quantization")
+
     if any(int(value) < 0 for value in values):
         raise ValueError("basis encoding currently supports unsigned amplitudes only")
 
@@ -70,6 +74,7 @@ def _validate_samples(
 
     if not isinstance(selected_bits, int) or selected_bits < 1:
         raise ValueError("amplitude_bits must be a positive integer")
+
     if selected_bits < required_bits:
         raise ValueError(
             f"amplitude_bits={selected_bits} cannot represent maximum sample "
@@ -81,6 +86,7 @@ def _validate_samples(
         amplitude_bits=selected_bits,
         time_bits=int(log2(len(normalized))),
     )
+
     return normalized, spec
 
 
@@ -111,6 +117,7 @@ def build_basis_encoded_audio_circuit(
     values, spec = _validate_samples(samples, amplitude_bits)
 
     amplitude = QuantumRegister(spec.amplitude_bits, "amplitude")
+
     if spec.time_bits:
         time = QuantumRegister(spec.time_bits, "time")
         circuit = QuantumCircuit(amplitude, time, name="basis_audio")
@@ -118,6 +125,7 @@ def build_basis_encoded_audio_circuit(
     else:
         time = None
         circuit = QuantumCircuit(amplitude, name="basis_audio")
+
     if add_barriers:
         circuit.barrier()
 
@@ -134,18 +142,26 @@ def build_basis_encoded_audio_circuit(
         for amplitude_index in range(spec.amplitude_bits):
             if ((sample >> amplitude_index) & 1) == 0:
                 continue
+
             if spec.time_bits == 0:
                 circuit.x(amplitude[amplitude_index])
             elif spec.time_bits == 1:
-                circuit.cx(time[0], amplitude[amplitude_index])  # type: ignore[index]
+                circuit.cx(
+                    time[0],  # type: ignore[index]
+                    amplitude[amplitude_index],
+                )
             else:
-                circuit.mcx(list(time), amplitude[amplitude_index])  # type: ignore[arg-type]
+                circuit.mcx(
+                    list(time),  # type: ignore[arg-type]
+                    amplitude[amplitude_index],
+                )
 
         for qubit_index in reversed(zero_controls):
             circuit.x(time[qubit_index])  # type: ignore[index]
 
     if add_barriers:
         circuit.barrier()
+
     return circuit, spec
 
 
@@ -159,6 +175,7 @@ def exact_basis_probabilities(
 
     if circuit.num_clbits:
         raise ValueError("exact statevector validation requires an unmeasured circuit")
+
     if circuit.num_qubits != spec.total_qubits:
         raise ValueError("circuit qubit count does not match the encoding specification")
 
@@ -169,9 +186,11 @@ def exact_basis_probabilities(
     for basis_index, probability in enumerate(probabilities):
         if probability <= atol:
             continue
+
         amplitude = basis_index & amplitude_mask
         time_index = basis_index >> spec.amplitude_bits
         decoded[(time_index, amplitude)] = float(probability)
+
     return decoded
 
 
@@ -187,13 +206,25 @@ def simulate_counts(
 
     if shots < 1:
         raise ValueError("shots must be a positive integer")
+
     if circuit.num_clbits:
         raise ValueError("pass the unmeasured preparation circuit")
 
     backend = simulator or AerSimulator()
     measured = circuit.measure_all(inplace=False)
-    compiled = transpile(measured, backend, optimization_level=optimization_level)
-    result = backend.run(compiled, shots=shots, seed_simulator=seed_simulator).result()
+
+    compiled = transpile(
+        measured,
+        backend,
+        optimization_level=optimization_level,
+    )
+
+    result = backend.run(
+        compiled,
+        shots=shots,
+        seed_simulator=seed_simulator,
+    ).result()
+
     return dict(result.get_counts())
 
 
@@ -213,13 +244,15 @@ def decode_measurement_counts(
 
     for raw_bitstring, count in counts.items():
         compact = raw_bitstring.replace(" ", "")
+
         if len(compact) != expected_width:
-    raise ValueError(
-        f"bitstring {raw_bitstring!r} has width {len(compact)}; expected {expected_width}"
-    )
+            raise ValueError(
+                f"bitstring {raw_bitstring!r} has width {len(compact)}; expected {expected_width}"
             )
+
         if set(compact) - {"0", "1"}:
             raise ValueError(f"invalid measurement bitstring: {raw_bitstring!r}")
+
         if count < 0:
             raise ValueError("measurement counts cannot be negative")
 
@@ -227,8 +260,13 @@ def decode_measurement_counts(
         amplitude_bits = qubit_order[: spec.amplitude_bits]
         time_bits = qubit_order[spec.amplitude_bits :]
 
-        amplitude = sum(int(bit) << index for index, bit in enumerate(amplitude_bits))
-        time_index = sum(int(bit) << index for index, bit in enumerate(time_bits))
+        amplitude = sum(
+            int(bit) << index for index, bit in enumerate(amplitude_bits)
+        )
+        time_index = sum(
+            int(bit) << index for index, bit in enumerate(time_bits)
+        )
+
         decoded[time_index][amplitude] += int(count)
 
     return dict(decoded)
@@ -245,17 +283,21 @@ def reconstruct_from_counts(
 
     for time_index in range(spec.num_samples):
         frequencies = decoded.get(time_index)
+
         if not frequencies:
             raise ValueError(
                 f"no measurement was observed for time index {time_index}; "
                 "increase the number of shots"
             )
+
         # Deterministic tie-break: prefer the lower amplitude.
         amplitude = min(
             frequencies,
             key=lambda value: (-frequencies[value], value),
         )
+
         reconstructed.append(amplitude)
+
     return reconstructed
 
 
@@ -272,6 +314,7 @@ def circuit_resource_metrics(
         basis_gates=list(basis_gates),
         optimization_level=optimization_level,
     )
+
     return {
         "num_qubits": circuit.num_qubits,
         "raw_depth": circuit.depth(),
