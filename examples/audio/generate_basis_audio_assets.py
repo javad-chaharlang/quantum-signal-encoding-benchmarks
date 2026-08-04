@@ -237,7 +237,7 @@ def _write_markdown_summary(
 
 ## Colored Qiskit circuit
 
-![Colored basis-encoded audio circuit](../../../figures/audio/basis_encoded_audio/circuit_colored.png)
+![Colored circuit](../../../figures/audio/basis_encoded_audio/circuit_colored.png)
 
 A scalable vector version is available at
 `figures/audio/basis_encoded_audio/circuit_colored.svg`.

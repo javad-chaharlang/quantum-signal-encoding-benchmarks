@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
-from functools import lru_cache
+from functools import cache
 from math import sqrt
 from statistics import mean, stdev
 
@@ -17,6 +17,10 @@ from qseb.audio import (
     simulate_counts,
 )
 from qseb.benchmarks.resource_scaling import generate_profile_samples
+
+DEFAULT_SHOT_SENSITIVITY_SEEDS = tuple(
+    42 + (10 * index) for index in range(50)
+)
 
 
 def _is_power_of_two(value: int) -> bool:
@@ -33,7 +37,7 @@ def _validate_shots(shots: int) -> None:
         raise ValueError("shots must be a positive integer")
 
 
-@lru_cache(maxsize=None)
+@cache
 def full_coverage_probability(num_samples: int, shots: int) -> float:
     """Return the exact probability that every time index is observed."""
 
@@ -169,7 +173,7 @@ def run_shot_sensitivity(
         2048,
         4096,
     ),
-    seeds: Sequence[int] = tuple(42 + (10 * index) for index in range(50)),
+    seeds: Sequence[int] = DEFAULT_SHOT_SENSITIVITY_SEEDS,
 ) -> list[dict[str, object]]:
     """Run the ideal shot-sensitivity Monte Carlo experiment."""
 

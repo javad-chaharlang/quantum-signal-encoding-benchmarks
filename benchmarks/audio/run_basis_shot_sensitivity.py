@@ -474,7 +474,7 @@ to observing all time indices at least once.
 
 ## Figures
 
-![Exact reconstruction probability](../../../figures/audio/shot_sensitivity/exact_reconstruction_probability.png)
+![Plot](../../../figures/audio/shot_sensitivity/exact_reconstruction_probability.png)
 
 ![Mean time-index coverage](../../../figures/audio/shot_sensitivity/mean_time_index_coverage.png)
 
