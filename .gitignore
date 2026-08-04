@@ -32,23 +32,46 @@ Thumbs.db
 
 # Generated research artifacts
 # Ignore generated outputs by default, but retain selected reproducible
-# publication assets for the basis-encoded audio experiment.
+# publication assets for validated experiments.
 
 results/*
 !results/.gitkeep
 !results/audio/
+
+# Basis-encoded reconstruction experiment
 !results/audio/basis_encoded_audio/
 !results/audio/basis_encoded_audio/README.md
 !results/audio/basis_encoded_audio/experiment_report.json
 
+# Controlled resource-scaling benchmark
+!results/audio/resource_scaling/
+!results/audio/resource_scaling/README.md
+!results/audio/resource_scaling/resource_scaling.json
+!results/audio/resource_scaling/resource_scaling_runs.csv
+!results/audio/resource_scaling/resource_scaling_summary.csv
+
 figures/*
 !figures/.gitkeep
 !figures/audio/
+
+# Basis-encoded reconstruction figures
 !figures/audio/basis_encoded_audio/
 !figures/audio/basis_encoded_audio/circuit_colored.png
 !figures/audio/basis_encoded_audio/circuit_colored.svg
 !figures/audio/basis_encoded_audio/reconstruction.png
 !figures/audio/basis_encoded_audio/measurement_counts.png
+
+# Controlled resource-scaling figures
+!figures/audio/resource_scaling/
+!figures/audio/resource_scaling/amplitude_depth_overhead_profiles.png
+!figures/audio/resource_scaling/amplitude_transpiled_cx_profiles.png
+!figures/audio/resource_scaling/amplitude_transpiled_depth_profiles.png
+!figures/audio/resource_scaling/length_depth_overhead_profiles.png
+!figures/audio/resource_scaling/length_transpiled_cx_profiles.png
+!figures/audio/resource_scaling/length_transpiled_depth_profiles.png
+
+# Local handoff archives
+resource_scaling_outputs*.zip
 
 # Local or large data
 data/*

@@ -12,9 +12,12 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Shot-based simulation
 - [x] Decoding and reconstruction
 - [x] Resource metrics
+- [x] Controlled signal-length and amplitude-resolution scaling study
+- [x] Sparse, repeated-random, and dense loading profiles
+- [x] Raw and basis-transpiled depth, size, and CX accounting
 - [ ] Shot-sensitivity experiment
 - [ ] Noise-model experiment
-- [ ] Scaling study
+- [ ] Hardware-aware transpilation study
 
 ### 2. QRDA
 
@@ -50,15 +53,17 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 
 ## Phase 3 — Cross-method benchmark suite
 
-- [ ] Unified experiment configuration
-- [ ] Qubit and ancilla counts
-- [ ] Raw and transpiled circuit depth
-- [ ] One- and two-qubit operation counts
-- [ ] State-preparation complexity
+- [x] Reusable resource-scaling utilities
+- [x] Deterministic benchmark profiles and seeds
+- [x] Raw and basis-transpiled circuit depth
+- [x] One- and two-qubit operation counts
+- [ ] Unified experiment configuration across encoding methods
+- [ ] Qubit and ancilla counts across methods
+- [ ] State-preparation complexity comparison
 - [ ] Shot sensitivity
 - [ ] Noise sensitivity
 - [ ] Reconstruction fidelity and error
-- [ ] Reproducible benchmark report
+- [ ] Reproducible cross-method benchmark report
 
 ## Phase 4 — Hybrid quantum medical imaging
 
@@ -80,6 +85,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 ## Release targets
 
 - **v0.1:** Basis-encoded audio foundation
+- **v0.1.1:** Controlled resource-scaling benchmark
 - **v0.2:** Exact QRDA implementation
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR

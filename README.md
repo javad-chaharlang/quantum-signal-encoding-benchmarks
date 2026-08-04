@@ -34,6 +34,7 @@ This implementation is intentionally **not labeled QRDA**. QRDA will be added se
 - Shot-based Aer simulation
 - Measurement decoding and signal reconstruction
 - Circuit resource reporting
+- Controlled resource-scaling benchmark
 - Unit tests and continuous integration
 - Executable Python example and Jupyter notebook
 - Method documentation and research roadmap
@@ -101,6 +102,68 @@ python examples/audio/generate_basis_audio_assets.py
 
 > This experiment verifies correctness and reproducibility for a small ideal simulation. It does **not** claim quantum advantage. The next benchmarks will study scaling, finite-shot coverage, transpilation cost, and noise sensitivity.
 
+## Controlled resource-scaling benchmark
+
+The second reproducible experiment separates three data-loading regimes:
+
+- **Sparse:** one set amplitude bit per sample
+- **Random:** five fixed seeds reported as mean ± standard deviation
+- **Dense:** all amplitude bits set
+
+The benchmark contains **84 raw runs** and **36 aggregated conditions**. It uses a
+fixed transpiler seed, three timing repetitions per run, the basis
+`rz`, `sx`, `x`, and `cx`, and no statevector, shot-based, noisy, or hardware
+execution.
+
+### Signal length is the dominant pressure
+
+With four amplitude qubits, the random profile produced:
+
+| Samples | Total qubits | Mean transpiled depth | Mean CX count | Mean depth overhead |
+|---:|---:|---:|---:|---:|
+| 2 | 5 | 6.8 ± 1.6 | 3.0 ± 1.2 | 1.1 ± 0.1 |
+| 8 | 7 | 393.0 ± 42.2 | 202.4 ± 23.0 | 13.2 ± 0.9 |
+| 16 | 8 | 2029.8 ± 338.7 | 834.8 ± 139.7 | 32.2 ± 2.7 |
+| 32 | 9 | 5759.0 ± 387.5 | 2228.4 ± 148.8 | 45.5 ± 1.7 |
+
+From 2 to 32 samples, mean transpiled depth increased by approximately **846.9x**
+and mean CX count by **742.8x**, while total qubits increased only from five to
+nine.
+
+![Controlled signal-length depth scaling](figures/audio/resource_scaling/length_transpiled_depth_profiles.png)
+
+### Amplitude width depends strongly on loading density
+
+For eight samples, the dense profile scaled linearly across two to eight amplitude
+qubits: every additional amplitude qubit added exactly **206** layers of
+transpiled depth and **110** CX gates. By contrast, the sparse profile held the
+number of loaded bits fixed and remained nearly constant.
+
+![Controlled amplitude-resolution depth scaling](figures/audio/resource_scaling/amplitude_transpiled_depth_profiles.png)
+
+The central finding is that **qubit count alone is not a sufficient resource
+indicator**. State-preparation cost is jointly determined by the width of the
+time-register controls and the number of set amplitude bits.
+
+Detailed tables and machine-readable results:
+
+- [`results/audio/resource_scaling/README.md`](results/audio/resource_scaling/README.md)
+- [`results/audio/resource_scaling/resource_scaling_summary.csv`](results/audio/resource_scaling/resource_scaling_summary.csv)
+- [`results/audio/resource_scaling/resource_scaling_runs.csv`](results/audio/resource_scaling/resource_scaling_runs.csv)
+- [`results/audio/resource_scaling/resource_scaling.json`](results/audio/resource_scaling/resource_scaling.json)
+- [`docs/audio/resource_scaling_benchmark.md`](docs/audio/resource_scaling_benchmark.md)
+
+Reproduce the benchmark with:
+
+```bash
+python benchmarks/audio/run_basis_resource_scaling.py
+```
+
+> These results characterize the present explicit state-preparation construction
+> under a fixed software and transpiler configuration. They do not establish
+> quantum advantage, hardware feasibility, execution fidelity, or asymptotic
+> optimality.
+
 ## Research questions
 
 This repository is designed to answer questions such as:
@@ -116,11 +179,13 @@ This repository is designed to answer questions such as:
 ```text
 quantum-signal-encoding-benchmarks/
 ├── src/qseb/                 # Installable Python package
-│   └── audio/                # Quantum audio encodings
+│   ├── audio/                # Quantum audio encodings
+│   └── benchmarks/           # Reusable benchmark utilities
 ├── examples/audio/           # Command-line demonstrations
 ├── notebooks/audio/          # Reproducible notebooks
 ├── docs/audio/               # Mathematical and implementation notes
 ├── tests/audio/              # Unit and reconstruction tests
+├── tests/benchmarks/         # Benchmark validation tests
 ├── benchmarks/               # Resource, noise, and scalability experiments
 ├── data/                     # Small public/example inputs only
 ├── results/                  # Selected reproducible benchmark reports
@@ -170,10 +235,16 @@ Run the compact command-line demonstration:
 python examples/audio/basis_encoding_demo.py
 ```
 
-Run the complete reproducible experiment and regenerate all figures and reports:
+Run the complete reconstruction experiment and regenerate its figures and reports:
 
 ```bash
 python examples/audio/generate_basis_audio_assets.py
+```
+
+Run the controlled resource-scaling benchmark:
+
+```bash
+python benchmarks/audio/run_basis_resource_scaling.py
 ```
 
 Minimal Python usage:
@@ -216,7 +287,7 @@ Generated results should not be committed without the corresponding script, conf
 |---|---|---|
 | Audio foundations | Basis-encoded audio implementation | ✅ Implemented |
 | Audio foundations | Reproducible visual experiment | ✅ Implemented |
-| Benchmarking | Resource scaling | ⏳ Next |
+| Benchmarking | Controlled resource scaling | ✅ Implemented |
 | Benchmarking | Shot sensitivity | ⏳ Planned |
 | Benchmarking | Noise sensitivity | ⏳ Planned |
 | Audio representations | QRDA | ⏳ Planned |
