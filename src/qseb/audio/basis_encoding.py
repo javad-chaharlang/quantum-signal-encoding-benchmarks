@@ -260,17 +260,12 @@ def decode_measurement_counts(
         amplitude_bits = qubit_order[: spec.amplitude_bits]
         time_bits = qubit_order[spec.amplitude_bits :]
 
-        amplitude = sum(
-            int(bit) << index for index, bit in enumerate(amplitude_bits)
-        )
-        time_index = sum(
-            int(bit) << index for index, bit in enumerate(time_bits)
-        )
+        amplitude = sum(int(bit) << index for index, bit in enumerate(amplitude_bits))
+        time_index = sum(int(bit) << index for index, bit in enumerate(time_bits))
 
         decoded[time_index][amplitude] += int(count)
 
     return dict(decoded)
-
 
 def reconstruct_from_counts(
     counts: Mapping[str, int],
