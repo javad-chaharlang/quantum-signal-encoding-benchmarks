@@ -31,10 +31,23 @@ htmlcov/
 Thumbs.db
 
 # Generated research artifacts
+# Ignore generated outputs by default, but retain selected reproducible
+# publication assets for the basis-encoded audio experiment.
+
 results/*
 !results/.gitkeep
+!results/audio/
+!results/audio/basis_encoded_audio/
+!results/audio/basis_encoded_audio/README.md
+!results/audio/basis_encoded_audio/experiment_report.json
+
 figures/*
 !figures/.gitkeep
+!figures/audio/
+!figures/audio/basis_encoded_audio/
+!figures/audio/basis_encoded_audio/circuit.png
+!figures/audio/basis_encoded_audio/reconstruction.png
+!figures/audio/basis_encoded_audio/measurement_counts.png
 
 # Local or large data
 data/*
