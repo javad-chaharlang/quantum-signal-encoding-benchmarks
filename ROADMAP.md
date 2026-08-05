@@ -4,9 +4,10 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 
 ## Phase 1 — Quantum audio representations
 
-### 1. Basis-encoded audio
+### 1. QRDA
 
 - [x] Mathematical state definition
+- [x] Unsigned amplitude and time registers
 - [x] State-preparation circuit
 - [x] Exact statevector validation
 - [x] Shot-based simulation
@@ -25,16 +26,11 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Gate, thermal-relaxation, and readout ablations
 - [x] Hardware-aware transpilation and physical-layout study
 - [x] Calibration record and circuit-exposure reporting
+- [x] QRDA-specific API and backward-compatible legacy aliases
+- [x] Unsigned-amplitude and bipolar-offset documentation
+- [ ] Reproduce the primary paper's exact worked example
+- [ ] Compare the implemented preparation circuit with the paper protocol
 - [ ] Real-QPU execution with a live calibration snapshot
-
-### 2. QRDA
-
-- [ ] Review and cite the primary paper
-- [ ] Reproduce the exact state definition
-- [ ] Implement amplitude and time registers
-- [ ] Add decoding and reconstruction
-- [ ] Validate against published examples
-- [ ] Compare with basis encoding
 
 ### 3. FRQA
 
@@ -94,12 +90,12 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 
 ## Release targets
 
-- **v0.1:** Basis-encoded audio foundation
+- **v0.1:** Unsigned amplitude/time audio foundation
 - **v0.1.1:** Controlled resource-scaling benchmark
 - **v0.1.2:** Shot-sensitivity and full-coverage benchmark
 - **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.1.4:** Calibration-derived hardware-noise benchmark
-- **v0.2:** Exact QRDA implementation
+- **v0.2:** QRDA state-representation formalization and validation
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR
 - **v0.5:** Audio/image resource and noise benchmark report

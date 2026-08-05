@@ -10,9 +10,9 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 > **Research principle:** an encoding method is not considered complete until its state definition, circuit preparation, decoding procedure, reconstruction accuracy, resource requirements, and noise sensitivity are documented.
 
-## Current release: v0.1.0
+## Current release: v0.2.0
 
-The initial release provides a complete educational and testable implementation of a **basis-encoded quantum audio representation**:
+Version 0.2 formalizes the existing unsigned amplitude/time encoder as a **QRDA state-representation implementation**:
 
 ```math
 |A\rangle =
@@ -24,10 +24,12 @@ The initial release provides a complete educational and testable implementation 
 
 where each quantized audio amplitude $a_t$ is stored in an amplitude register and each sample index $t$ is stored in a time register.
 
-This implementation is intentionally **not labeled QRDA**. QRDA will be added separately after reproducing its exact state definition and experimental protocol from the primary literature.
+The state structure matches QRDA's entangled computational-basis amplitude and time registers. The implementation accepts unsigned quantized amplitudes; bipolar samples require a recorded offset before encoding. Exact reproduction of the primary paper's worked example and gate-level protocol remains an explicit validation item.
 
 ### Included
 
+- QRDA-specific public API with backward-compatible legacy aliases
+- Explicit documentation of unsigned amplitude encoding and bipolar offset mapping
 - Validated integer audio quantization input
 - Reversible Qiskit state-preparation circuit
 - Exact statevector verification
