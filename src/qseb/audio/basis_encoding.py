@@ -1,14 +1,16 @@
-"""Basis-encoded quantum representation of a quantized audio signal.
+"""Legacy API for the repository's QRDA-compatible audio encoder.
 
 The prepared state is
 
-    |A> = 1/sqrt(N) sum_t |a_t>_amp |t>_time,
+    |S> = 1/sqrt(N) sum_t |S_t>_amplitude |t>_time,
 
-where N is a power of two, ``a_t`` is a non-negative integer amplitude,
+where N is a power of two, ``S_t`` is an unsigned quantized amplitude,
 and Qiskit little-endian qubit indexing is used inside each register.
 
-This module implements a transparent educational baseline. It is not an
-implementation of QRDA, FRQA, or QPAM.
+The state representation matches QRDA's entangled amplitude and time
+computational-basis registers. The historical module and function names are
+retained for backward compatibility. New code should import the QRDA-specific
+names from :mod:`qseb.audio.qrda_encoding`.
 """
 
 from __future__ import annotations
@@ -66,7 +68,7 @@ def _validate_samples(
         raise TypeError("all samples must be integers after quantization")
 
     if any(int(value) < 0 for value in values):
-        raise ValueError("basis encoding currently supports unsigned amplitudes only")
+        raise ValueError("QRDA currently supports unsigned amplitudes only")
 
     normalized = tuple(int(value) for value in values)
     required_bits = max(1, ceil(log2(max(normalized) + 1)))
@@ -120,11 +122,11 @@ def build_basis_encoded_audio_circuit(
 
     if spec.time_bits:
         time = QuantumRegister(spec.time_bits, "time")
-        circuit = QuantumCircuit(amplitude, time, name="basis_audio")
+        circuit = QuantumCircuit(amplitude, time, name="qrda_audio")
         circuit.h(time)
     else:
         time = None
-        circuit = QuantumCircuit(amplitude, name="basis_audio")
+        circuit = QuantumCircuit(amplitude, name="qrda_audio")
 
     if add_barriers:
         circuit.barrier()
