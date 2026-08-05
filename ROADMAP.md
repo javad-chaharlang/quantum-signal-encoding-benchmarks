@@ -31,20 +31,27 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [ ] Reproduce the primary paper's exact worked example
 - [ ] Compare the implemented preparation circuit with the paper protocol
 - [ ] Real-QPU execution with a live calibration snapshot
+- [ ] Real-QPU error-mitigation comparison
 
-### 3. FRQA
+### 2. FRQA
 
-- [ ] Exact signed-amplitude representation
-- [ ] State preparation and inverse reconstruction
-- [ ] Comparison with QRDA
-- [ ] Scaling and noise analysis
+- [ ] Review and cite the primary paper
+- [ ] Implement exact signed-amplitude representation
+- [ ] Implement state preparation and inverse reconstruction
+- [ ] Add exact statevector validation
+- [ ] Add shot-based reconstruction tests
+- [ ] Compare qubit requirements with QRDA
+- [ ] Compare state-preparation complexity with QRDA
+- [ ] Perform scaling and noise analysis
 
-### 4. QPAM and SQPAM
+### 3. QPAM and SQPAM
 
-- [ ] Probability-amplitude encoding
-- [ ] Shot-complexity analysis
-- [ ] Reconstruction error analysis
-- [ ] Comparative benchmark
+- [ ] Review and cite the primary papers
+- [ ] Implement probability-amplitude encoding
+- [ ] Implement decoding and reconstruction
+- [ ] Analyze shot complexity
+- [ ] Analyze reconstruction error
+- [ ] Compare QPAM and SQPAM with QRDA and FRQA
 
 ## Phase 2 — Quantum image representations
 
@@ -61,14 +68,14 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Deterministic benchmark profiles and seeds
 - [x] Raw and basis-transpiled circuit depth
 - [x] One- and two-qubit operation counts
+- [x] Shot sensitivity for the QRDA baseline
+- [x] Synthetic noise sensitivity for the QRDA baseline
+- [x] Calibration-derived hardware-noise sensitivity for the QRDA baseline
 - [ ] Unified experiment configuration across encoding methods
 - [ ] Qubit and ancilla counts across methods
 - [ ] State-preparation complexity comparison
-- [x] Shot sensitivity for the basis-encoded baseline
-- [x] Synthetic noise sensitivity for the basis-encoded baseline
-- [x] Calibration-derived hardware-noise sensitivity for the basis baseline
+- [ ] Reconstruction fidelity and error comparison
 - [ ] Real-QPU execution and mitigation benchmark
-- [ ] Reconstruction fidelity and error
 - [ ] Reproducible cross-method benchmark report
 
 ## Phase 4 — Hybrid quantum medical imaging
@@ -96,6 +103,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.1.4:** Calibration-derived hardware-noise benchmark
 - **v0.2:** QRDA state-representation formalization and validation
+- **v0.2.1:** Primary-paper QRDA example and gate-protocol validation
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR
 - **v0.5:** Audio/image resource and noise benchmark report
