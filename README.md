@@ -6,59 +6,108 @@
 [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![Research Software](https://img.shields.io/badge/Research-Reproducible-informational.svg)](#reproducibility)
 
-A reproducible research repository for implementing and benchmarking **quantum representations of classical signals** with Qiskit. The project begins with quantum audio and image encoding, then develops toward hybrid quantum-classical medical imaging and secure quantum multimedia processing.
+A reproducible research repository for implementing and benchmarking **quantum representations of classical signals** with Qiskit. The project begins with quantum audio and image encoding and then progresses toward hybrid quantum-classical learning, medical imaging, and secure quantum multimedia processing.
 
 > **Research principle:** an encoding method is not considered complete until its state definition, circuit preparation, decoding procedure, reconstruction accuracy, resource requirements, and noise sensitivity are documented.
 
 ## Current release: v0.2.0
 
-Version 0.2 formalizes the existing unsigned amplitude/time encoder as a **QRDA state-representation implementation**:
+Version 0.2 formalizes the repository's existing unsigned amplitude/time encoder as a **QRDA state-representation implementation**.
+
+The encoded quantum audio state is
 
 ```math
-|S\rangle =
+\left|S\right\rangle
+=
 \frac{1}{\sqrt{N}}
 \sum_{t=0}^{N-1}
-|S_t\rangle_{\mathrm{amplitude}}
-|t\rangle_{\mathrm{time}}.
+\left|S_t\right\rangle_{\mathrm{amp}}
+\otimes
+\left|t\right\rangle_{\mathrm{time}},
+\qquad N=2^n.
 ```
 
-Here, each unsigned quantized audio amplitude \(S_t\) is stored in the amplitude register, while each sample index \(t\) is stored in the time register.
+Here:
 
-The state structure matches QRDA's entangled computational-basis amplitude and time registers. The current implementation accepts unsigned quantized amplitudes in the range \(0 \leq S_t \leq 2^m-1\). Bipolar audio samples therefore require a recorded offset before encoding and inverse offset removal after reconstruction.
+- $S_t$ is the unsigned quantized amplitude of the sample at time index $t$;
+- $m$ is the number of qubits in the amplitude register;
+- $n$ is the number of qubits in the time register;
+- $N=2^n$ is the number of encoded time positions.
 
-Version 0.2 establishes equivalence at the **state-representation and software-API level**. Reproduction of the primary paper's exact worked example and a gate-by-gate comparison with its preparation protocol remain explicit validation items.
+The current implementation accepts unsigned quantized amplitudes in the range
 
-### Included
+```math
+0 \leq S_t \leq 2^m-1.
+```
 
-- QRDA-specific public API with backward-compatible legacy aliases
-- Explicit documentation of unsigned amplitude encoding and bipolar offset mapping
-- Validated integer audio quantization input
+A bipolar sample $x_t$ must therefore be mapped to a non-negative integer before encoding. One possible preprocessing map is
+
+```math
+S_t=x_t+2^{m-1}.
+```
+
+After reconstruction, the original bipolar value is recovered by
+
+```math
+x_t=S_t-2^{m-1}.
+```
+
+The offset transformation is a preprocessing convention and must be recorded with the experiment configuration. It is not applied automatically by the current encoder.
+
+Version 0.2 establishes equivalence at the **state-representation and software-API level**. Reproduction of the primary paper's exact worked example and a gate-by-gate comparison with its original preparation protocol remain explicit validation tasks for v0.2.1.
+
+### Included in v0.2.0
+
+- QRDA-specific public API
+- Backward-compatible legacy aliases
+- Unsigned amplitude/time-register representation
+- Input validation for quantized integer samples
 - Reversible Qiskit state-preparation circuit
 - Exact statevector verification
-- Shot-based Aer simulation
+- Shot-based Qiskit Aer simulation
 - Measurement decoding and signal reconstruction
 - Circuit resource reporting
 - Controlled resource-scaling benchmark
-- Controlled shot-sensitivity benchmark with exact theoretical reference
+- Controlled shot-sensitivity benchmark
+- Exact theoretical full-coverage reference
 - Controlled synthetic gate and readout noise benchmark
-- Calibration-derived hardware-noise benchmark with layout analysis
+- Calibration-derived hardware-noise benchmark
+- Physical-layout sensitivity analysis
 - Unit tests and continuous integration
-- Executable Python example and Jupyter notebook
-- Method documentation and research roadmap
+- Executable Python examples and a Jupyter notebook
+- Mathematical, methodological, and benchmark documentation
 
 ### Primary QRDA reference
 
 Wang, J. (2016). QRDA: Quantum Representation of Digital Audio. *International Journal of Theoretical Physics, 55*, 1622–1641. https://doi.org/10.1007/s10773-015-2800-2
 
+## QRDA API
+
+New code should use the QRDA-specific public API:
+
+```python
+from qseb.audio import (
+    QRDAEncodingSpec,
+    build_qrda_circuit,
+    decode_qrda_counts,
+    exact_qrda_probabilities,
+    qrda_resource_metrics,
+    reconstruct_qrda_signal,
+    simulate_qrda_counts,
+)
+```
+
+The historical basis-encoding names remain available as aliases so existing scripts and notebooks continue to work.
+
 ## First reproducible QRDA experiment
 
-The first complete experiment encodes and reconstructs the unsigned quantized audio signal:
+The first complete experiment encodes and reconstructs the unsigned quantized signal
 
 ```python
 samples = [3, 6, 2, 5]
 ```
 
-The experiment uses:
+with the following configuration:
 
 | Item | Value |
 |---|---:|
@@ -67,7 +116,7 @@ The experiment uses:
 | Total qubits | 5 |
 | Measurement shots | 4096 |
 | Simulator seed | 42 |
-| Optimization level | 1 |
+| Transpiler optimization level | 1 |
 | Exact reconstruction | ✅ True |
 
 ### Signal reconstruction
@@ -78,7 +127,7 @@ The original and reconstructed samples are identical under ideal shot-based simu
 
 ### Quantum circuit
 
-The preparation circuit places the time register in uniform superposition and writes each unsigned quantized amplitude into the amplitude register using controlled operations. The figure is rendered with Qiskit's Matplotlib drawer and a publication-style custom color scheme.
+The preparation circuit places the time register in uniform superposition and conditionally writes each unsigned quantized amplitude into the amplitude register.
 
 ![Colored QRDA quantum audio circuit](figures/audio/basis_encoded_audio/circuit_colored.png)
 
@@ -97,17 +146,17 @@ The following figure shows the observed computational-basis states from 4,096 sh
 | Transpiled depth | 77 |
 | Transpiled size | 118 |
 
-A scalable SVG version is available at `figures/audio/basis_encoded_audio/circuit_colored.svg`.
+A scalable circuit figure is available at `figures/audio/basis_encoded_audio/circuit_colored.svg`.
 
-The complete configuration, interpretation, and machine-readable results are available in:
+The full configuration, report, and generation script are available in:
 
 - [`results/audio/basis_encoded_audio/README.md`](results/audio/basis_encoded_audio/README.md)
 - [`results/audio/basis_encoded_audio/experiment_report.json`](results/audio/basis_encoded_audio/experiment_report.json)
 - [`examples/audio/generate_basis_audio_assets.py`](examples/audio/generate_basis_audio_assets.py)
 
-The historical `basis_encoded_audio` paths and `run_basis_*` script names are retained for backward compatibility. New Python code should use the QRDA-specific public API.
+The historical `basis_encoded_audio` paths and `basis_*` script names are retained for backward compatibility. Their current implementation evaluates the QRDA state representation.
 
-Reproduce the full experiment with:
+Reproduce the experiment with:
 
 ```bash
 python examples/audio/generate_basis_audio_assets.py
@@ -117,11 +166,11 @@ python examples/audio/generate_basis_audio_assets.py
 
 ## Controlled resource-scaling benchmark
 
-The second reproducible experiment separates three data-loading regimes:
+The resource-scaling benchmark separates three data-loading regimes:
 
-- **Sparse:** one set amplitude bit per sample
-- **Random:** five fixed seeds reported as mean ± standard deviation
-- **Dense:** all amplitude bits set
+- **Sparse:** one set amplitude bit per sample;
+- **Random:** five fixed random seeds reported as mean ± standard deviation;
+- **Dense:** all amplitude bits set.
 
 The benchmark contains **84 raw runs** and **36 aggregated conditions**. It uses a fixed transpiler seed, three timing repetitions per run, the basis gates `rz`, `sx`, `x`, and `cx`, and no statevector, shot-based, noisy, or hardware execution.
 
@@ -140,15 +189,15 @@ From 2 to 32 samples, mean transpiled depth increased by approximately **846.9×
 
 ![Controlled QRDA signal-length depth scaling](figures/audio/resource_scaling/length_transpiled_depth_profiles.png)
 
-### Amplitude width depends strongly on loading density
+### Amplitude width depends on loading density
 
-For eight samples, the dense profile scaled linearly across two to eight amplitude qubits: every additional amplitude qubit added exactly **206** layers of transpiled depth and **110** CX gates. By contrast, the sparse profile held the number of loaded bits fixed and remained nearly constant.
+For eight samples, the dense profile scaled linearly across two to eight amplitude qubits: every additional amplitude qubit added exactly **206** layers of transpiled depth and **110** CX gates. By contrast, the sparse profile kept the number of loaded bits fixed and remained nearly constant.
 
 ![Controlled QRDA amplitude-resolution depth scaling](figures/audio/resource_scaling/amplitude_transpiled_depth_profiles.png)
 
 The central finding is that **qubit count alone is not a sufficient resource indicator**. QRDA state-preparation cost is jointly determined by the width of the time-register controls and the number of set amplitude bits.
 
-Detailed tables and machine-readable results:
+Detailed results and documentation:
 
 - [`results/audio/resource_scaling/README.md`](results/audio/resource_scaling/README.md)
 - [`results/audio/resource_scaling/resource_scaling_summary.csv`](results/audio/resource_scaling/resource_scaling_summary.csv)
@@ -166,9 +215,20 @@ python benchmarks/audio/run_basis_resource_scaling.py
 
 ## Shot-sensitivity benchmark
 
-The third reproducible experiment evaluates finite-shot reconstruction for signals with **4, 8, 16, and 32 samples** across shot counts from **4 to 4096**. It includes **2,200 Monte Carlo runs**, **44 aggregated conditions**, exact theoretical full-coverage probabilities, Wilson 95% intervals, and representative Qiskit Aer encode-measure-decode validations.
+The shot-sensitivity benchmark evaluates finite-shot reconstruction for signals with **4, 8, 16, and 32 samples** across shot counts from **4 to 4096**. It includes **2,200 Monte Carlo runs**, **44 aggregated conditions**, exact theoretical full-coverage probabilities, Wilson 95% intervals, and representative Qiskit Aer encode-measure-decode validations.
 
-For the present ideal QRDA encoding, an observed time index reveals its associated unsigned amplitude deterministically. Exact reconstruction therefore requires every time index to be observed at least once.
+For the current ideal QRDA encoding, observing a time index reveals its associated unsigned amplitude deterministically. Exact reconstruction therefore requires every time index to be observed at least once.
+
+For $N$ equally likely time indices and $M$ measurement shots, the exact probability of observing every time index is
+
+```math
+P_{\mathrm{full}}(N,M)
+=
+\frac{N!}{N^M}
+\left\{\begin{matrix}M\\N\end{matrix}\right\},
+```
+
+where the braces denote a Stirling number of the second kind.
 
 ### Theoretical shot requirements
 
@@ -179,15 +239,15 @@ For the present ideal QRDA encoding, an observed time index reveals its associat
 | 16 | 90 | 115 |
 | 32 | 203 | 255 |
 
-All **44 theoretical probabilities** fell inside the corresponding empirical Wilson 95% confidence intervals. The maximum absolute empirical/theoretical mean-coverage error was only **0.0301**.
+All **44 theoretical probabilities** fell inside the corresponding empirical Wilson 95% confidence intervals. The maximum absolute empirical/theoretical mean-coverage error was **0.0301**.
 
 ![QRDA exact reconstruction probability versus shots](figures/audio/shot_sensitivity/exact_reconstruction_probability.png)
 
-The mean coverage curves also closely followed the exact expectation. Importantly, high mean coverage does not guarantee complete reconstruction: even one unobserved time index leaves the signal incomplete.
+The mean-coverage curves also closely followed the exact expectation. High mean coverage does not guarantee complete reconstruction: one unobserved time index is sufficient to leave the signal incomplete.
 
 ![QRDA mean time-index coverage versus shots](figures/audio/shot_sensitivity/mean_time_index_coverage.png)
 
-Both actual Qiskit validation cases achieved complete coverage, correct observed amplitudes, and exact signal reconstruction.
+Both Qiskit validation cases achieved complete coverage, correct observed amplitudes, and exact signal reconstruction.
 
 Detailed results and documentation:
 
@@ -208,7 +268,7 @@ python benchmarks/audio/run_basis_shot_sensitivity.py
 
 ## Controlled synthetic-noise benchmark
 
-The fourth reproducible experiment evaluates synthetic gate depolarization, symmetric readout error, and their combination. It contains **130 noisy simulations** and **26 aggregated conditions** for four- and eight-sample signals.
+The synthetic-noise benchmark evaluates gate depolarization, symmetric readout error, and their combination. It contains **130 noisy simulations** and **26 aggregated conditions** for four- and eight-sample signals.
 
 The eight-sample circuit was substantially larger:
 
@@ -225,7 +285,7 @@ For eight samples, modal amplitude accuracy remained one through moderate gate n
 
 ![QRDA modal amplitude accuracy under noise](figures/audio/noise_sensitivity/modal_amplitude_accuracy.png)
 
-A key negative result is that four-sample exact reconstruction remained perfect even when severe gate noise reduced the correct-state fraction to **0.222** and increased joint TVD to **0.778**. Therefore, exact modal reconstruction alone can hide substantial distribution corruption.
+A key negative result is that four-sample exact reconstruction remained perfect even when severe gate noise reduced the correct-state fraction to **0.222** and increased joint total variation distance to **0.778**. Exact modal reconstruction alone can therefore hide substantial distribution corruption.
 
 Detailed results and documentation:
 
@@ -246,7 +306,7 @@ python benchmarks/audio/run_basis_noise_sensitivity.py
 
 ## Calibration-derived hardware-noise benchmark
 
-The final simulation-based robustness benchmark uses `FakeNairobiV2`, a historical seven-qubit backend snapshot, to construct an approximate Aer device-noise model. It evaluates ideal, readout-only, gate-plus-thermal, and full-calibration conditions across five transpiler layouts and three simulator seeds.
+The final simulation-based robustness benchmark uses `FakeNairobiV2`, a historical seven-qubit backend snapshot, to construct an approximate Qiskit Aer device-noise model. It evaluates ideal, readout-only, gate-plus-thermal, and full-calibration conditions across five transpiler layouts and three simulator seeds.
 
 The hardware-mapped circuit expanded sharply with signal length:
 
@@ -259,11 +319,11 @@ Readout-only noise retained correct-state fractions near **0.861** and **0.855**
 
 ![Correct QRDA computational-basis states under calibration-derived noise](figures/audio/hardware_noise/correct_basis_shot_fraction.png)
 
-The four-sample circuit retained exact modal reconstruction under the full model, but only **0.397** of measured basis states were correct and joint TVD reached **0.603**. The eight-sample circuit failed exact reconstruction in every full-calibration run, with mean modal accuracy **0.158**.
+The four-sample circuit retained exact modal reconstruction under the full model, but only **0.397** of measured basis states were correct and joint total variation distance reached **0.603**. The eight-sample circuit failed exact reconstruction in every full-calibration run, with mean modal accuracy **0.158**.
 
 ![QRDA modal reconstruction under calibration-derived noise](figures/audio/hardware_noise/modal_amplitude_accuracy.png)
 
-Layout selection had a measurable effect for the six-logical-qubit circuit, but very limited effect for the seven-logical-qubit circuit because it occupies the entire backend.
+Layout selection had a measurable effect for the six-logical-qubit circuit but a limited effect for the seven-logical-qubit circuit because it occupies the entire backend.
 
 ![QRDA hardware-layout sensitivity](figures/audio/hardware_noise/layout_sensitivity.png)
 
@@ -293,21 +353,22 @@ This repository is designed to answer questions such as:
 2. How accurately can a signal be reconstructed from finite-shot measurements?
 3. Which encoding methods remain usable after transpilation and realistic noise?
 4. What is the practical cost of state preparation and readout?
-5. When does a quantum representation offer a meaningful downstream benefit?
+5. How strongly do data patterns affect state-preparation resources?
+6. When does a quantum representation provide a meaningful downstream benefit?
 
 ## Repository structure
 
 ```text
 quantum-signal-encoding-benchmarks/
 ├── src/qseb/                 # Installable Python package
-│   ├── audio/                # Quantum audio encodings
+│   ├── audio/                # Quantum audio representations
 │   └── benchmarks/           # Reusable benchmark utilities
 ├── examples/audio/           # Command-line demonstrations
 ├── notebooks/audio/          # Reproducible notebooks
 ├── docs/audio/               # Mathematical and implementation notes
 ├── tests/audio/              # Unit and reconstruction tests
 ├── tests/benchmarks/         # Benchmark validation tests
-├── benchmarks/               # Resource, noise, and scalability experiments
+├── benchmarks/               # Resource, shot, noise, and scalability studies
 ├── data/                     # Small public/example inputs only
 ├── results/                  # Selected reproducible benchmark reports
 ├── figures/                  # Selected reproducible plots and circuit figures
@@ -350,19 +411,49 @@ pip install -e ".[dev,notebook]"
 
 ## Quick start
 
-Run the compact legacy command-line demonstration:
+### Minimal QRDA example
+
+```python
+from qseb.audio import (
+    build_qrda_circuit,
+    reconstruct_qrda_signal,
+    simulate_qrda_counts,
+)
+
+samples = [3, 6, 2, 5]
+
+circuit, spec = build_qrda_circuit(samples, amplitude_bits=3)
+counts = simulate_qrda_counts(
+    circuit,
+    shots=4096,
+    seed_simulator=42,
+)
+reconstructed = reconstruct_qrda_signal(counts, spec)
+
+print(reconstructed)
+```
+
+Expected output:
+
+```text
+[3, 6, 2, 5]
+```
+
+### Legacy command-line entry points
+
+Run the compact command-line demonstration:
 
 ```bash
 python examples/audio/basis_encoding_demo.py
 ```
 
-Run the complete reconstruction experiment and regenerate its figures and reports:
+Regenerate the complete reconstruction experiment, figures, and reports:
 
 ```bash
 python examples/audio/generate_basis_audio_assets.py
 ```
 
-Run the controlled resource-scaling benchmark:
+Run the resource-scaling benchmark:
 
 ```bash
 python benchmarks/audio/run_basis_resource_scaling.py
@@ -374,7 +465,7 @@ Run the shot-sensitivity benchmark:
 python benchmarks/audio/run_basis_shot_sensitivity.py
 ```
 
-Run the controlled synthetic-noise benchmark:
+Run the synthetic-noise benchmark:
 
 ```bash
 python benchmarks/audio/run_basis_noise_sensitivity.py
@@ -386,28 +477,11 @@ Run the calibration-derived hardware-noise benchmark:
 python benchmarks/audio/run_basis_calibration_hardware_noise.py
 ```
 
-The `basis_*` filenames are retained as legacy entry points. Their current implementation evaluates the QRDA state representation.
-
-### Minimal Python usage
-
-```python
-from qseb.audio import (
-    build_qrda_circuit,
-    reconstruct_qrda_signal,
-    simulate_qrda_counts,
-)
-
-samples = [3, 6, 2, 5]
-circuit, spec = build_qrda_circuit(samples, amplitude_bits=3)
-counts = simulate_qrda_counts(circuit, shots=4096, seed_simulator=42)
-reconstructed = reconstruct_qrda_signal(counts, spec)
-
-print(reconstructed)
-```
+The `basis_*` filenames are legacy entry points retained to avoid breaking earlier commands. New Python code should use the QRDA-specific public API.
 
 ### Legacy API compatibility
 
-Existing code remains valid:
+Existing imports remain valid:
 
 ```python
 from qseb.audio import (
@@ -417,22 +491,45 @@ from qseb.audio import (
 )
 ```
 
-The legacy names are aliases for the same validated QRDA-compatible implementation.
+The legacy names are aliases for the same validated implementation.
+
+## Testing and quality checks
+
+Run the complete test suite:
+
+```bash
+python -m pytest
+```
+
+Run lint checks:
+
+```bash
+python -m ruff check .
+```
+
+Check formatting:
+
+```bash
+python -m ruff format --check .
+```
+
+The continuous-integration workflow runs installation, linting, formatting, and tests on Python 3.10, 3.11, and 3.12.
 
 ## Reproducibility
 
 Every benchmark should record:
 
-- Software and Python versions
-- Input data and preprocessing
-- Random seeds
-- Number of shots
-- Simulator or backend
-- Transpiler optimization level
-- Qubit count, circuit depth, and operation counts
-- Reconstruction metrics
-- Noise-model assumptions
-- Hardware limitations and negative results
+- software and Python versions;
+- input data and preprocessing;
+- random seeds;
+- number of measurement shots;
+- simulator or backend;
+- transpiler optimization level and seed;
+- qubit count, circuit depth, and operation counts;
+- reconstruction metrics;
+- noise-model assumptions;
+- calibration metadata when applicable;
+- hardware limitations and negative results.
 
 Generated results should not be committed without the corresponding script, configuration, and seed.
 
@@ -441,11 +538,11 @@ Generated results should not be committed without the corresponding script, conf
 | Phase | Method or topic | Status |
 |---|---|---|
 | Audio representations | QRDA state representation and public API | ✅ Implemented |
-| Audio representations | QRDA exact published-example validation | ⏳ Pending |
+| Audio representations | QRDA exact published-example validation | ⏳ v0.2.1 |
 | Audio foundations | Reproducible QRDA visual experiment | ✅ Implemented |
 | Benchmarking | Controlled QRDA resource scaling | ✅ Implemented |
 | Benchmarking | QRDA shot sensitivity | ✅ Implemented |
-| Benchmarking | QRDA synthetic noise sensitivity | ✅ Implemented |
+| Benchmarking | QRDA synthetic-noise sensitivity | ✅ Implemented |
 | Benchmarking | QRDA calibration-derived hardware noise | ✅ Implemented |
 | Benchmarking | Real-QPU execution | ⏳ Future extension |
 | Audio representations | FRQA | ⏳ Planned |
@@ -462,10 +559,12 @@ See [ROADMAP.md](ROADMAP.md) for the detailed research plan.
 
 - Primary papers are cited for every reproduced method.
 - Reimplementations are identified explicitly and do not claim ownership of the original method.
+- State-representation equivalence is not presented as complete reproduction of a paper's exact gate-level protocol.
 - Code, figures, and text from other projects are not copied without compatible licensing and attribution.
 - Simulator results are not presented as hardware results.
-- Quantum advantage is not claimed without strong classical baselines and full resource accounting.
-- State-representation equivalence is not presented as complete reproduction of a paper's exact gate-level protocol.
+- Historical calibration snapshots are not presented as live backend calibrations.
+- Quantum advantage is not claimed without strong classical baselines and complete resource accounting.
+- Negative results and practical limitations are retained in reports.
 
 ## Citation
 
