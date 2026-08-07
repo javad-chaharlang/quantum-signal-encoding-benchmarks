@@ -26,10 +26,23 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Gate, thermal-relaxation, and readout ablations
 - [x] Hardware-aware transpilation and physical-layout study
 - [x] Calibration record and circuit-exposure reporting
-- [x] QRDA-specific API and backward-compatible legacy aliases
-- [x] Unsigned-amplitude and bipolar-offset documentation
-- [ ] Reproduce the primary paper's exact worked example
-- [ ] Compare the implemented preparation circuit with the paper protocol
+- [x] QRDA-specific public API
+- [x] Backward-compatible legacy API
+- [x] Arbitrary-length QRDA \(2^l\)-box implementation
+- [x] Explicit redundant/padding-state support
+- [x] Correct single-sample \(L=1\) QRDA handling
+- [x] Signed-to-unsigned and unsigned-to-signed QRDA preprocessing
+- [x] Reproduce the primary paper's exact 15-sample worked example
+- [x] Independently construct and validate the paper reference state
+- [x] Validate state fidelity against the primary-paper example
+- [x] Compare the implemented logical preparation protocol with the paper
+- [x] Validate the paper's 33 controlled amplitude writes
+- [x] Document open/closed-control mapping to Qiskit `mcx`
+- [x] Separate logical operation counts from transpiled CX resource counts
+- [ ] QRDA connection operation
+- [ ] QRDA mixing operation
+- [ ] QRDA DPCM compression
+- [ ] QRDA MBE / combined compression study
 - [ ] Real-QPU execution with a live calibration snapshot
 - [ ] Real-QPU error-mitigation comparison
 
@@ -102,8 +115,10 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - **v0.1.2:** Shot-sensitivity and full-coverage benchmark
 - **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.1.4:** Calibration-derived hardware-noise benchmark
-- **v0.2:** QRDA state-representation formalization and validation
-- **v0.2.1:** Primary-paper QRDA example and gate-protocol validation
+- **v0.2:** QRDA state-representation formalization
+- **v0.2.1 (current):** Complete QRDA \(2^l\)-box core and primary-paper validation
+- **v0.2.2:** QRDA connection and mixing operations
+- **v0.2.3:** QRDA compression experiments
 - **v0.3:** FRQA and comparative audio benchmark
 - **v0.4:** FRQI and NEQR
 - **v0.5:** Audio/image resource and noise benchmark report
