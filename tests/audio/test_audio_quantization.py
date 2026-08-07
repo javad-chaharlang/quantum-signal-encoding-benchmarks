@@ -12,7 +12,6 @@ from qseb.audio import (
     validate_unsigned_samples,
 )
 
-
 PAPER_SIGNED_SAMPLES = (0, 3, 5, 7, 7, 5, 3, 0, -3, -5, -7, -7, -5, -3, 0)
 
 PAPER_UNSIGNED_SAMPLES = (8, 11, 13, 15, 15, 13, 11, 8, 5, 3, 1, 1, 3, 5, 8)

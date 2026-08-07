@@ -1,0 +1,97 @@
+{
+  "benchmark": "qrda_primary_paper_protocol_comparison",
+  "environment": {
+    "platform": "Windows-11-10.0.26220-SP0",
+    "python": "3.14.6",
+    "qiskit": "2.5.1",
+    "qiskit_aer": "0.17.2"
+  },
+  "interpretation": {
+    "gate_for_gate_level": "Not identical: the paper uses symbolic open/closed l-CNOT controls, whereas Qiskit realizes zero-controls with X conjugation around MCX and then decomposes MCX into the selected basis.",
+    "logical_write_level": "33 controlled amplitude writes match the paper.",
+    "physical_resource_claim": "Transpiled CX counts are implementation-dependent and are not identified with the paper's symbolic 4-CNOT count.",
+    "state_level": "Exact match."
+  },
+  "logical_protocol": {
+    "identity_gates_emitted": 0,
+    "paper_controlled_write_count": 33,
+    "paper_h_count": 4,
+    "qiskit_h_count": 4,
+    "qiskit_mcx_count": 33,
+    "qiskit_zero_control_x_wrappers": 64
+  },
+  "paper_example": {
+    "amplitude_bits": 4,
+    "box_size": 16,
+    "controlled_amplitude_writes": 33,
+    "num_samples": 15,
+    "padding_count": 1,
+    "time_bits": 4,
+    "total_qubits": 8
+  },
+  "raw_circuit": {
+    "depth": 61,
+    "operations": {
+      "h": 4,
+      "mcx": 33,
+      "x": 64
+    },
+    "size": 101
+  },
+  "reference": {
+    "author": "Jian Wang",
+    "doi": "10.1007/s10773-015-2800-2",
+    "journal": "International Journal of Theoretical Physics",
+    "title": "QRDA: Quantum Representation of Digital Audio",
+    "validated_sections": {
+      "controlled_write_count": "Section 5.2.3 comparison of Figs. 4 and 11",
+      "preparation": "Section 3.2, Eqs. (8)-(18), Figs. 3-4",
+      "representation": "Section 3.1, Eqs. (5)-(7)"
+    },
+    "year": 2016
+  },
+  "state_equivalence": {
+    "exact_support_size": 16,
+    "padding_state_probability": 0.06249999999998784,
+    "passes": true,
+    "state_fidelity": 0.999999999999807
+  },
+  "transpiled_circuits": [
+    {
+      "basis_gates": [
+        "rz",
+        "sx",
+        "x",
+        "cx"
+      ],
+      "depth": 2320,
+      "operations": {
+        "cx": 818,
+        "rz": 1735,
+        "sx": 390,
+        "x": 74
+      },
+      "optimization_level": 0,
+      "seed_transpiler": 42,
+      "size": 3017
+    },
+    {
+      "basis_gates": [
+        "rz",
+        "sx",
+        "x",
+        "cx"
+      ],
+      "depth": 1993,
+      "operations": {
+        "cx": 806,
+        "rz": 1241,
+        "sx": 286,
+        "x": 26
+      },
+      "optimization_level": 1,
+      "seed_transpiler": 42,
+      "size": 2359
+    }
+  ]
+}
