@@ -10,72 +10,84 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 > **Research principle:** an encoding method is not considered complete until its state definition, circuit preparation, decoding procedure, reconstruction accuracy, resource requirements, and noise sensitivity are documented.
 
-## Current release: v0.2.0
+## Current release: v0.2.1
 
-Version 0.2 formalizes the repository's existing unsigned amplitude/time encoder as a **QRDA state-representation implementation**.
+Version 0.2.1 completes the repository's **primary-paper validation of QRDA** and extends the encoder from the earlier power-of-two case to the full QRDA \(2^l\)-box construction for arbitrary positive signal lengths.
 
-The encoded quantum audio state is
+For an effective signal of length \(L\), the QRDA time-register width is
 
 ```math
-\left|S\right\rangle
-=
-\frac{1}{\sqrt{N}}
-\sum_{t=0}^{N-1}
-\left|S_t\right\rangle_{\mathrm{amp}}
-\otimes
-\left|t\right\rangle_{\mathrm{time}},
-\qquad N=2^n.
+l=
+\begin{cases}
+\lceil \log_2 L\rceil, & L>1,\\
+1, & L=1.
+\end{cases}
 ```
 
-Here:
+The complete encoded state is
 
-- $S_t$ is the unsigned quantized amplitude of the sample at time index $t$;
-- $m$ is the number of qubits in the amplitude register;
-- $n$ is the number of qubits in the time register;
-- $N=2^n$ is the number of encoded time positions.
+```math
+\left|B\right\rangle
+=
+\frac{1}{\sqrt{2^l}}
+\left(
+\sum_{t=0}^{L-1}
+\left|S_t\right\rangle_{\mathrm{amp}}
+\otimes
+\left|t\right\rangle_{\mathrm{time}}
++
+\sum_{t=L}^{2^l-1}
+\left|0\right\rangle^{\otimes m}_{\mathrm{amp}}
+\otimes
+\left|t\right\rangle_{\mathrm{time}}
+\right),
+```
 
-The current implementation accepts unsigned quantized amplitudes in the range
+where:
+
+- \(L\) is the number of effective audio samples;
+- \(m\) is the number of qubits in the amplitude register;
+- \(l\) is the number of qubits in the time register;
+- \(S_t\) is the unsigned quantized amplitude associated with effective time index \(t\);
+- \(2^l-L\) is the number of redundant QRDA box positions.
+
+The encoder accepts unsigned quantized amplitudes in the range
 
 ```math
 0 \leq S_t \leq 2^m-1.
 ```
 
-A bipolar sample $x_t$ must therefore be mapped to a non-negative integer before encoding. One possible preprocessing map is
+For a signed \(m\)-bit sample \(x_t\), the repository provides explicit preprocessing helpers implementing
 
 ```math
-S_t=x_t+2^{m-1}.
+S_t=x_t+2^{m-1},
 ```
 
-After reconstruction, the original bipolar value is recovered by
+with inverse reconstruction
 
 ```math
 x_t=S_t-2^{m-1}.
 ```
 
-The offset transformation is a preprocessing convention and must be recorded with the experiment configuration. It is not applied automatically by the current encoder.
+The encoder itself remains unsigned; signed/unsigned translation is a separate, validated preprocessing layer.
 
-Version 0.2 establishes equivalence at the **state-representation and software-API level**. Reproduction of the primary paper's exact worked example and a gate-by-gate comparison with its original preparation protocol remain explicit validation tasks for v0.2.1.
+### Included in v0.2.1
 
-### Included in v0.2.0
-
-- QRDA-specific public API
-- Backward-compatible legacy aliases
-- Unsigned amplitude/time-register representation
-- Input validation for quantized integer samples
-- Reversible Qiskit state-preparation circuit
-- Exact statevector verification
-- Shot-based Qiskit Aer simulation
-- Measurement decoding and signal reconstruction
-- Circuit resource reporting
-- Controlled resource-scaling benchmark
-- Controlled shot-sensitivity benchmark
-- Exact theoretical full-coverage reference
-- Controlled synthetic gate and readout noise benchmark
-- Calibration-derived hardware-noise benchmark
-- Physical-layout sensitivity analysis
+- Full arbitrary-length QRDA \(2^l\)-box support
+- Explicit `box_size`, `padding_count`, and `padding_fraction` metadata
+- Correct \(L=1\) handling with one time qubit
+- Validated signed-to-unsigned and unsigned-to-signed audio translation
+- Exact reproduction of the primary paper's 15-sample, 4-bit worked example
+- 8-qubit paper-example circuit: 4 amplitude qubits + 4 time qubits
+- One redundant QRDA box state at \(T=15\) with amplitude zero
+- Independently constructed reference state with fidelity 1.0
+- Exact logical controlled-write count of 33, matching the paper
+- Explicit mapping from open/closed controls to Qiskit `X`-conjugated `mcx`
+- Exact unsigned and signed shot-based round-trip reconstruction
+- Machine-readable validation and circuit-metric outputs
+- Backward-compatible legacy basis-encoding API
+- Existing resource, shot, synthetic-noise, and calibration-derived hardware-noise benchmarks
 - Unit tests and continuous integration
-- Executable Python examples and a Jupyter notebook
-- Mathematical, methodological, and benchmark documentation
 
 ### Primary QRDA reference
 
@@ -91,13 +103,78 @@ from qseb.audio import (
     build_qrda_circuit,
     decode_qrda_counts,
     exact_qrda_probabilities,
+    qrda_offset,
     qrda_resource_metrics,
     reconstruct_qrda_signal,
+    signed_amplitude_range,
+    signed_to_unsigned_samples,
     simulate_qrda_counts,
+    unsigned_amplitude_range,
+    unsigned_to_signed_samples,
 )
 ```
 
 The historical basis-encoding names remain available as aliases so existing scripts and notebooks continue to work.
+
+## Primary-paper QRDA validation
+
+Version 0.2.1 reproduces the worked QRDA example from the primary paper.
+
+The original signed 4-bit signal is
+
+```text
+[0, 3, 5, 7, 7, 5, 3, 0, -3, -5, -7, -7, -5, -3, 0]
+```
+
+and the QRDA offset translation produces
+
+```text
+[8, 11, 13, 15, 15, 13, 11, 8, 5, 3, 1, 1, 3, 5, 8]
+```
+
+The validated configuration is:
+
+| Item | Validated value |
+|---|---:|
+| Effective samples | 15 |
+| Amplitude qubits | 4 |
+| Time qubits | 4 |
+| Total qubits | 8 |
+| QRDA box size | 16 |
+| Padding states | 1 |
+| Nonzero state support | 16 |
+| Probability per QRDA box state | 0.0625 |
+| State fidelity to independent reference | 1.0 |
+| Paper logical controlled writes | 33 |
+| Repository logical `mcx` writes | 33 |
+| Zero-control `X` wrappers | 64 |
+| Exact unsigned reconstruction | ✅ |
+| Exact signed reconstruction | ✅ |
+
+The repository distinguishes **state equivalence**, **logical preparation equivalence**, and **physical transpiled gate decomposition**. The 33 symbolic controlled writes reported by the paper are therefore not equated with the final transpiled CX count.
+
+Reproduce the worked example with:
+
+```bash
+python examples/audio/reproduce_qrda_primary_paper.py
+```
+
+Reproduce the preparation-protocol comparison with:
+
+```bash
+python benchmarks/audio/run_qrda_protocol_comparison.py
+```
+
+Validation outputs:
+
+- [`results/audio/qrda_primary_paper/validation_report.json`](results/audio/qrda_primary_paper/validation_report.json)
+- [`results/audio/qrda_primary_paper/statevector_support.csv`](results/audio/qrda_primary_paper/statevector_support.csv)
+- [`results/audio/qrda_primary_paper/protocol_comparison.json`](results/audio/qrda_primary_paper/protocol_comparison.json)
+- [`results/audio/qrda_primary_paper/protocol_mapping.csv`](results/audio/qrda_primary_paper/protocol_mapping.csv)
+- [`results/audio/qrda_primary_paper/circuit_metrics.csv`](results/audio/qrda_primary_paper/circuit_metrics.csv)
+- [`docs/audio/qrda_primary_paper_validation.md`](docs/audio/qrda_primary_paper_validation.md)
+
+> The implementation reproduces the paper's QRDA state and logical amplitude-loading protocol. It does not claim physical gate-for-gate identity with the paper diagram.
 
 ## First reproducible QRDA experiment
 
@@ -439,6 +516,15 @@ Expected output:
 [3, 6, 2, 5]
 ```
 
+### Primary-paper reproduction
+
+```bash
+python examples/audio/reproduce_qrda_primary_paper.py
+python benchmarks/audio/run_qrda_protocol_comparison.py
+```
+
+These commands validate the 15-sample primary-paper example, full \(2^l\)-box support, padding state, state fidelity, logical controlled-write count, and transpiled circuit metrics.
+
 ### Legacy command-line entry points
 
 Run the compact command-line demonstration:
@@ -537,8 +623,9 @@ Generated results should not be committed without the corresponding script, conf
 
 | Phase | Method or topic | Status |
 |---|---|---|
-| Audio representations | QRDA state representation and public API | ✅ Implemented |
-| Audio representations | QRDA exact published-example validation | ⏳ v0.2.1 |
+| Audio representations | QRDA arbitrary-length \(2^l\)-box implementation | ✅ v0.2.1 |
+| Audio representations | QRDA exact published-example validation | ✅ v0.2.1 |
+| Audio representations | QRDA preparation-protocol comparison | ✅ v0.2.1 |
 | Audio foundations | Reproducible QRDA visual experiment | ✅ Implemented |
 | Benchmarking | Controlled QRDA resource scaling | ✅ Implemented |
 | Benchmarking | QRDA shot sensitivity | ✅ Implemented |
@@ -559,7 +646,7 @@ See [ROADMAP.md](ROADMAP.md) for the detailed research plan.
 
 - Primary papers are cited for every reproduced method.
 - Reimplementations are identified explicitly and do not claim ownership of the original method.
-- State-representation equivalence is not presented as complete reproduction of a paper's exact gate-level protocol.
+- State and logical-protocol equivalence are distinguished explicitly from physical gate-for-gate identity after transpilation.
 - Code, figures, and text from other projects are not copied without compatible licensing and attribution.
 - Simulator results are not presented as hardware results.
 - Historical calibration snapshots are not presented as live backend calibrations.
