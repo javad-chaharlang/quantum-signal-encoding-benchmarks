@@ -1,0 +1,5 @@
+stage,paper_definition,paper_count,qiskit_operation,qiskit_count,interpretation
+Step 1,I^q on amplitude register,4,identity omitted,0,Equivalent no-op on the initialized amplitude register.
+Step 1,H^l on time register,4,h,4,Direct logical match.
+Step 2,l-CNOT for each set amplitude bit,33,mcx,33,Direct logical controlled-write count match.
+Step 2,open/closed time controls,diagrammatic,x wrappers around mcx,64,Zero-controls are converted to all-one controls by X conjugation.

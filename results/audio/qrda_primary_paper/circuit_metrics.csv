@@ -1,0 +1,4 @@
+representation,optimization_level,num_qubits,depth,size,h,x,mcx,cx,rz,sx
+logical_qrda,raw,8,61,101,4,64,33,0,0,0
+basis_transpiled,0,8,2320,3017,0,74,0,818,1735,390
+basis_transpiled,1,8,1993,2359,0,26,0,806,1241,286
