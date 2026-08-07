@@ -6,7 +6,7 @@ Wang, J. (2016). QRDA: Quantum Representation of Digital Audio. *International J
 
 ## Representation
 
-For an effective digital-audio signal containing \(L\) samples, QRDA uses an amplitude register of \(m\) qubits and a time register of \(l\) qubits, where
+For an effective digital-audio signal containing $L$ samples, QRDA uses an amplitude register of $m$ qubits and a time register of $l$ qubits, where
 
 ```math
 l=
@@ -16,7 +16,7 @@ l=
 \end{cases}
 ```
 
-The complete QRDA box contains \(2^l\) time positions:
+The complete QRDA box contains $2^l$ time positions:
 
 ```math
 \left|B\right\rangle
@@ -35,7 +35,7 @@ The complete QRDA box contains \(2^l\) time positions:
 \right).
 ```
 
-The first summation contains effective audio samples. The second contains redundant QRDA box positions whenever \(L\) is not a power of two.
+The first summation contains effective audio samples. The second contains redundant QRDA box positions whenever $L$ is not a power of two.
 
 The implementation exposes `num_samples`, `time_bits`, `box_size`, `padding_count`, and `padding_fraction`.
 
@@ -49,7 +49,7 @@ The quantum encoder accepts
 
 ## Signed digital-audio preprocessing
 
-For an \(m\)-bit signed sample
+For an $m$-bit signed sample
 
 ```math
 -2^{m-1}\leq x_t\leq 2^{m-1}-1,
@@ -93,7 +93,7 @@ Redundant positions receive no amplitude writes and therefore remain at amplitud
 
 ## Qiskit register convention
 
-The amplitude register precedes the time register. For amplitude width \(m\),
+The amplitude register precedes the time register. For amplitude width $m$,
 
 ```math
 \mathrm{basis\ index}=S_t+(t\ll m).
@@ -123,7 +123,7 @@ Validated properties:
 | Total qubits | 8 |
 | Box size | 16 |
 | Padding count | 1 |
-| Padding state | \(T=15,\ S_T=0\) |
+| Padding state | $T=15,\ S_T=0$ |
 | Nonzero basis states | 16 |
 | Probability per state | 1/16 |
 | Statevector amplitude magnitude | 1/4 |
@@ -154,11 +154,11 @@ The paper's symbolic 33 four-controlled writes must therefore not be identified 
 
 `decode_qrda_counts()` decodes effective and redundant positions.
 
-`reconstruct_qrda_signal()` returns only the first \(L\) effective samples.
+`reconstruct_qrda_signal()` returns only the first $L$ effective samples.
 
 ## Arbitrary-length examples
 
-| \(L\) | \(l\) | Box size | Padding |
+| $L$ | $l$ | Box size | Padding |
 |---:|---:|---:|---:|
 | 1 | 1 | 2 | 1 |
 | 3 | 2 | 4 | 1 |

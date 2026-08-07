@@ -12,9 +12,9 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 ## Current release: v0.2.1
 
-Version 0.2.1 completes the repository's **primary-paper validation of QRDA** and extends the encoder from the earlier power-of-two case to the full QRDA \(2^l\)-box construction for arbitrary positive signal lengths.
+Version 0.2.1 completes the repository's **primary-paper validation of QRDA** and extends the encoder from the earlier power-of-two case to the full QRDA $2^l$-box construction for arbitrary positive signal lengths.
 
-For an effective signal of length \(L\), the QRDA time-register width is
+For an effective signal of length $L$, the QRDA time-register width is
 
 ```math
 l=
@@ -45,11 +45,11 @@ The complete encoded state is
 
 where:
 
-- \(L\) is the number of effective audio samples;
-- \(m\) is the number of qubits in the amplitude register;
-- \(l\) is the number of qubits in the time register;
-- \(S_t\) is the unsigned quantized amplitude associated with effective time index \(t\);
-- \(2^l-L\) is the number of redundant QRDA box positions.
+- $L$ is the number of effective audio samples;
+- $m$ is the number of qubits in the amplitude register;
+- $l$ is the number of qubits in the time register;
+- $S_t$ is the unsigned quantized amplitude associated with effective time index $t$;
+- $2^l-L$ is the number of redundant QRDA box positions.
 
 The encoder accepts unsigned quantized amplitudes in the range
 
@@ -57,7 +57,7 @@ The encoder accepts unsigned quantized amplitudes in the range
 0 \leq S_t \leq 2^m-1.
 ```
 
-For a signed \(m\)-bit sample \(x_t\), the repository provides explicit preprocessing helpers implementing
+For a signed $m$-bit sample $x_t$, the repository provides explicit preprocessing helpers implementing
 
 ```math
 S_t=x_t+2^{m-1},
@@ -73,13 +73,13 @@ The encoder itself remains unsigned; signed/unsigned translation is a separate, 
 
 ### Included in v0.2.1
 
-- Full arbitrary-length QRDA \(2^l\)-box support
+- Full arbitrary-length QRDA $2^l$-box support
 - Explicit `box_size`, `padding_count`, and `padding_fraction` metadata
-- Correct \(L=1\) handling with one time qubit
+- Correct $L=1$ handling with one time qubit
 - Validated signed-to-unsigned and unsigned-to-signed audio translation
 - Exact reproduction of the primary paper's 15-sample, 4-bit worked example
 - 8-qubit paper-example circuit: 4 amplitude qubits + 4 time qubits
-- One redundant QRDA box state at \(T=15\) with amplitude zero
+- One redundant QRDA box state at $T=15$ with amplitude zero
 - Independently constructed reference state with fidelity 1.0
 - Exact logical controlled-write count of 33, matching the paper
 - Explicit mapping from open/closed controls to Qiskit `X`-conjugated `mcx`
@@ -523,7 +523,7 @@ python examples/audio/reproduce_qrda_primary_paper.py
 python benchmarks/audio/run_qrda_protocol_comparison.py
 ```
 
-These commands validate the 15-sample primary-paper example, full \(2^l\)-box support, padding state, state fidelity, logical controlled-write count, and transpiled circuit metrics.
+These commands validate the 15-sample primary-paper example, full $2^l$-box support, padding state, state fidelity, logical controlled-write count, and transpiled circuit metrics.
 
 ### Legacy command-line entry points
 
@@ -623,7 +623,7 @@ Generated results should not be committed without the corresponding script, conf
 
 | Phase | Method or topic | Status |
 |---|---|---|
-| Audio representations | QRDA arbitrary-length \(2^l\)-box implementation | ✅ v0.2.1 |
+| Audio representations | QRDA arbitrary-length $2^l$-box implementation | ✅ v0.2.1 |
 | Audio representations | QRDA exact published-example validation | ✅ v0.2.1 |
 | Audio representations | QRDA preparation-protocol comparison | ✅ v0.2.1 |
 | Audio foundations | Reproducible QRDA visual experiment | ✅ Implemented |

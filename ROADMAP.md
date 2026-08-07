@@ -28,9 +28,9 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - [x] Calibration record and circuit-exposure reporting
 - [x] QRDA-specific public API
 - [x] Backward-compatible legacy API
-- [x] Arbitrary-length QRDA \(2^l\)-box implementation
+- [x] Arbitrary-length QRDA $2^l$-box implementation
 - [x] Explicit redundant/padding-state support
-- [x] Correct single-sample \(L=1\) QRDA handling
+- [x] Correct single-sample $L=1$ QRDA handling
 - [x] Signed-to-unsigned and unsigned-to-signed QRDA preprocessing
 - [x] Reproduce the primary paper's exact 15-sample worked example
 - [x] Independently construct and validate the paper reference state
@@ -116,7 +116,7 @@ This roadmap organizes the project as a progression from **encoding** to **bench
 - **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.1.4:** Calibration-derived hardware-noise benchmark
 - **v0.2:** QRDA state-representation formalization
-- **v0.2.1 (current):** Complete QRDA \(2^l\)-box core and primary-paper validation
+- **v0.2.1 (current):** Complete QRDA $2^l$-box core and primary-paper validation
 - **v0.2.2:** QRDA connection and mixing operations
 - **v0.2.3:** QRDA compression experiments
 - **v0.3:** FRQA and comparative audio benchmark
