@@ -10,6 +10,24 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 > **Research principle:** an encoding method is not considered complete until its state definition, circuit preparation, decoding procedure, reconstruction accuracy, resource requirements, and noise sensitivity are documented.
 
+## Research direction
+
+This repository is **not intended to become an exhaustive collection of quantum signal-representation implementations**. Published audio and image representations are treated as validated research baselines: they are reproduced, tested, visualized, and critically assessed only to the depth needed to support the project's main trajectory.
+
+The current research path is:
+
+**validated representations → critical security-suitability analysis → quantum steganography/watermarking → quantum steganalysis → secure quantum medical imaging**
+
+QRDA is the first completed baseline. Operations such as QRDA connection, mixing, and compression are no longer mandatory roadmap milestones; they will be implemented only if a downstream security or medical-imaging experiment requires them.
+
+The next representation work therefore prioritizes **FRQA for signed-audio comparison**, followed by selected quantum-image baselines such as **FRQI and NEQR**, before moving into representation suitability for secure quantum multimedia.
+
+See:
+
+- [`ROADMAP.md`](ROADMAP.md) for the updated milestone structure
+- [`docs/research_direction.md`](docs/research_direction.md) for the scientific scope and decision rules
+- [`docs/linkedin_research_series.md`](docs/linkedin_research_series.md) for the evidence-based research communication plan
+
 ## Current release: v0.2.1
 
 Version 0.2.1 completes the repository's **primary-paper validation of QRDA** and extends the encoder from the earlier power-of-two case to the full QRDA $2^l$-box construction for arbitrary positive signal lengths.
