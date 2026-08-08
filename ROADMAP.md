@@ -43,9 +43,9 @@ QRDA is the first fully validated audio-representation baseline.
 - [x] Synthetic-noise evaluation
 - [x] Calibration-derived hardware-noise evaluation
 - [x] QRDA-specific public API
-- [x] Arbitrary-length QRDA \(2^l\)-box implementation
+- [x] Arbitrary-length QRDA $2^l$-box implementation
 - [x] Redundant/padding-state support
-- [x] Correct \(L=1\) handling
+- [x] Correct $L=1$ handling
 - [x] Signed-to-unsigned and unsigned-to-signed preprocessing
 - [x] Exact reproduction of the primary paper's 15-sample worked example
 - [x] Independent reference-state construction
@@ -263,7 +263,7 @@ Medical imaging is treated as a high-value application domain, not merely anothe
 - **v0.1.3:** Controlled synthetic-noise benchmark
 - **v0.1.4:** Calibration-derived hardware-noise benchmark
 - **v0.2:** QRDA state-representation formalization
-- **v0.2.1:** Complete QRDA \(2^l\)-box core, primary-paper validation, and visual validation
+- **v0.2.1:** Complete QRDA $2^l$-box core, primary-paper validation, and visual validation
 - **v0.2.2:** QRDA limitations and security-suitability assessment
 - **v0.3:** FRQA baseline and signed-audio comparison
 - **v0.4:** Selected quantum-image representation baselines, prioritizing FRQI and NEQR
