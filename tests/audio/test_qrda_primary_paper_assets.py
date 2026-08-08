@@ -17,6 +17,13 @@ def _load_module():
     return module
 
 
+def test_module_import_does_not_require_visual_dependencies() -> None:
+    module = _load_module()
+    assert callable(module.build_paper_example)
+    assert callable(module.generate_assets)
+    assert callable(module._get_pyplot)
+
+
 def test_build_paper_example_metrics() -> None:
     module = _load_module()
     data = module.build_paper_example()
