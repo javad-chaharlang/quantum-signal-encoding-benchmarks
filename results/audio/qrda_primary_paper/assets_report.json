@@ -1,0 +1,80 @@
+{
+  "reference": {
+    "title": "QRDA: Quantum Representation of Digital Audio",
+    "author": "Jian Wang",
+    "year": 2016,
+    "doi": "10.1007/s10773-015-2800-2"
+  },
+  "core_metrics": {
+    "num_samples": 15,
+    "amplitude_bits": 4,
+    "time_bits": 4,
+    "total_qubits": 8,
+    "box_size": 16,
+    "padding_count": 1,
+    "padding_fraction": 0.0625,
+    "controlled_writes": 33,
+    "nonzero_support_states": 16
+  },
+  "reconstruction": {
+    "unsigned_exact": true,
+    "signed_exact": true,
+    "unsigned_reconstructed": [
+      8,
+      11,
+      13,
+      15,
+      15,
+      13,
+      11,
+      8,
+      5,
+      3,
+      1,
+      1,
+      3,
+      5,
+      8
+    ],
+    "signed_reconstructed": [
+      0,
+      3,
+      5,
+      7,
+      7,
+      5,
+      3,
+      0,
+      -3,
+      -5,
+      -7,
+      -7,
+      -5,
+      -3,
+      0
+    ]
+  },
+  "figures": {
+    "qrda_logical_circuit": {
+      "png": "figures\\audio\\qrda_primary_paper\\qrda_logical_circuit.png",
+      "svg": "figures\\audio\\qrda_primary_paper\\qrda_logical_circuit.svg"
+    },
+    "qrda_transpiled_o0": {
+      "png": "figures\\audio\\qrda_primary_paper\\qrda_transpiled_o0.png",
+      "svg": "figures\\audio\\qrda_primary_paper\\qrda_transpiled_o0.svg"
+    },
+    "qrda_transpiled_o1": {
+      "png": "figures\\audio\\qrda_primary_paper\\qrda_transpiled_o1.png",
+      "svg": "figures\\audio\\qrda_primary_paper\\qrda_transpiled_o1.svg"
+    },
+    "signed_unsigned_signal": "figures\\audio\\qrda_primary_paper\\signed_unsigned_signal.png",
+    "state_support": "figures\\audio\\qrda_primary_paper\\state_support.png",
+    "reconstruction_unsigned": "figures\\audio\\qrda_primary_paper\\reconstruction_unsigned.png",
+    "reconstruction_signed": "figures\\audio\\qrda_primary_paper\\reconstruction_signed.png",
+    "protocol_comparison": "figures\\audio\\qrda_primary_paper\\protocol_comparison.png"
+  },
+  "results": {
+    "assets_report": "results\\audio\\qrda_primary_paper\\assets_report.json",
+    "results_readme": "results\\audio\\qrda_primary_paper\\README.md"
+  }
+}
