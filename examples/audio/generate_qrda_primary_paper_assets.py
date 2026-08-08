@@ -26,8 +26,8 @@ Results:
 
 Notes
 -----
-- Circuit image generation uses Qiskit's Matplotlib drawer and therefore
-  requires matplotlib and pylatexenc. Install with:
+- Circuit and plot rendering use Matplotlib and Qiskit's Matplotlib drawer.
+  These dependencies are imported only when rendering is requested. Install with:
 
       python -m pip install -e ".[dev,notebook]"
 
@@ -41,7 +41,6 @@ import json
 from collections.abc import Mapping
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 from qiskit import transpile
 
 from qseb.audio import (
@@ -98,6 +97,20 @@ FIGURE_DIR = Path("figures/audio/qrda_primary_paper")
 RESULT_DIR = Path("results/audio/qrda_primary_paper")
 
 
+def _get_pyplot():
+    """Import Matplotlib only when visual rendering is requested."""
+    try:
+        import matplotlib.pyplot as plt
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "QRDA visual rendering requires Matplotlib. "
+            "Install the visual dependencies with: "
+            'python -m pip install -e ".[dev,notebook]"'
+        ) from exc
+
+    return plt
+
+
 def _ensure_dir(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
@@ -136,6 +149,8 @@ def build_paper_example():
 
 def _save_circuit_images(circuit, stem: str, out_dir: Path) -> dict[str, str]:
     """Save a Qiskit circuit in PNG and SVG formats."""
+    plt = _get_pyplot()
+
     figure = circuit.draw(output="mpl", fold=-1)
     png_path = out_dir / f"{stem}.png"
     svg_path = out_dir / f"{stem}.svg"
@@ -149,6 +164,8 @@ def _save_circuit_images(circuit, stem: str, out_dir: Path) -> dict[str, str]:
 
 
 def _plot_signed_unsigned_signal(out_dir: Path) -> str:
+    plt = _get_pyplot()
+
     plt.figure(figsize=(10, 5))
     x = list(range(len(PAPER_SIGNED_SAMPLES)))
     plt.plot(x, PAPER_SIGNED_SAMPLES, marker="o", label="Signed signal")
@@ -169,6 +186,8 @@ def _plot_state_support(
     probabilities: Mapping[tuple[int, int], float],
     out_dir: Path,
 ) -> str:
+    plt = _get_pyplot()
+
     states = sorted(probabilities.items())
     labels = [f"({time_index},{amplitude})" for (time_index, amplitude), _ in states]
     values = [probability for _, probability in states]
@@ -194,6 +213,8 @@ def _plot_reconstruction(
     filename: str,
     out_dir: Path,
 ) -> str:
+    plt = _get_pyplot()
+
     x = list(range(len(original)))
 
     plt.figure(figsize=(10, 5))
@@ -212,6 +233,8 @@ def _plot_reconstruction(
 
 
 def _plot_protocol_comparison(circuit, out_dir: Path) -> str:
+    plt = _get_pyplot()
+
     ops = circuit.count_ops()
     labels = [
         "Paper H",
@@ -261,28 +284,28 @@ def _write_results_readme(figure_dir: Path, result_dir: Path, report: dict[str, 
         "",
         "## Figures",
         "",
-        "### Logical QRDA circuit",
+        f"### Logical QRDA circuit",
         f"![logical circuit]({relative}/qrda_logical_circuit.png)",
         "",
-        "### Transpiled circuit (optimization level 0)",
+        f"### Transpiled circuit (optimization level 0)",
         f"![transpiled o0]({relative}/qrda_transpiled_o0.png)",
         "",
-        "### Transpiled circuit (optimization level 1)",
+        f"### Transpiled circuit (optimization level 1)",
         f"![transpiled o1]({relative}/qrda_transpiled_o1.png)",
         "",
-        "### Signed to unsigned translation",
+        f"### Signed to unsigned translation",
         f"![signed unsigned]({relative}/signed_unsigned_signal.png)",
         "",
-        "### Exact state support",
+        f"### Exact state support",
         f"![state support]({relative}/state_support.png)",
         "",
-        "### Unsigned reconstruction",
+        f"### Unsigned reconstruction",
         f"![unsigned reconstruction]({relative}/reconstruction_unsigned.png)",
         "",
-        "### Signed reconstruction",
+        f"### Signed reconstruction",
         f"![signed reconstruction]({relative}/reconstruction_signed.png)",
         "",
-        "### Protocol comparison",
+        f"### Protocol comparison",
         f"![protocol comparison]({relative}/protocol_comparison.png)",
         "",
         "## Machine-readable report",
