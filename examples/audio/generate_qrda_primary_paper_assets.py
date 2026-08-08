@@ -104,7 +104,7 @@ def _get_pyplot():
     except ModuleNotFoundError as exc:
         raise RuntimeError(
             "QRDA visual rendering requires Matplotlib. "
-            'Install the visual dependencies with: '
+            "Install the visual dependencies with: "
             'python -m pip install -e ".[dev,notebook]"'
         ) from exc
 
