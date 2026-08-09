@@ -1,289 +1,237 @@
 # Research Roadmap
 
-This repository follows a research path from **validated quantum signal representations** to **secure quantum multimedia processing**, with a final emphasis on **quantum steganography, quantum steganalysis, and secure quantum medical imaging**.
+This repository uses quantum audio and image representations as **validated foundations**, not as the final research destination.
 
-Published representation methods are treated as **research baselines**, not as the final objective of the repository. A representation is implemented only to the depth needed to:
+The project is organized around three broad technical themes:
 
-1. reproduce and validate the primary literature;
-2. expose practical and conceptual limitations;
-3. compare representation suitability for downstream security tasks; and
-4. support the transition to original research in secure quantum multimedia.
+- **Quantum Audio & Imaging**
+- **Quantum Information Processing**
+- **Quantum Machine Learning**
 
-## Research principles
+> **Project rule:** do not continue implementing or benchmarking a representation after it has provided the evidence needed for downstream research.
 
-- **Primary-source first:** implementation claims must be traceable to the original paper or clearly identified as repository-side engineering choices.
-- **Validation before extension:** state definition, preparation, decoding, reconstruction, and representative resource behavior must be checked before proposing extensions.
-- **Critical assessment over feature completeness:** implementing every operation described in a representation paper is not a project goal.
-- **Security relevance:** further implementation is prioritized only when it informs watermarking, steganography, steganalysis, secure multimedia, or medical-image research.
-- **Reproducibility:** scripts, configurations, seeds, generated artifacts, and negative results should remain reproducible.
-- **Claim discipline:** simulator results, transpiled circuits, noisy simulations, and real-QPU execution must be distinguished explicitly. Quantum advantage is not claimed without direct evidence.
+## Research trajectory
+
+**Validated representations → representation suitability → quantum information hiding → quantum machine learning → quantum steganalysis → secure quantum medical imaging**
+
+The repository prioritizes critical understanding and transition to original research over exhaustive reproduction of every operation in representation papers.
 
 ---
 
-## Phase 1 — Validated quantum-audio foundation
+## Phase 1 — Minimal validated quantum-audio foundations
 
-### 1. QRDA baseline
+### QRDA — completed baseline
 
-QRDA is the first fully validated audio-representation baseline.
+QRDA is the first validated quantum-audio baseline in the repository.
 
-#### Completed
+Completed work already includes the state definition, amplitude/time registers, arbitrary-length encoding, signed/unsigned preprocessing, primary-paper reproduction, reconstruction, state fidelity, logical/transpiled circuit interpretation, representative resource scaling, shot sensitivity, controlled noise analysis, and reproducible figures.
 
-- [x] Mathematical QRDA state definition
-- [x] Unsigned amplitude and time registers
-- [x] State-preparation circuit
-- [x] Exact statevector validation
-- [x] Shot-based simulation
-- [x] Decoding and reconstruction
-- [x] Resource metrics
-- [x] Controlled signal-length and amplitude-resolution scaling
-- [x] Sparse, repeated-random, and dense loading profiles
-- [x] Raw and basis-transpiled depth, size, and CX accounting
-- [x] Shot-sensitivity analysis
-- [x] Exact full-coverage probability and theoretical shot thresholds
-- [x] Synthetic-noise evaluation
-- [x] Calibration-derived hardware-noise evaluation
-- [x] QRDA-specific public API
-- [x] Arbitrary-length QRDA $2^l$-box implementation
-- [x] Redundant/padding-state support
-- [x] Correct $L=1$ handling
-- [x] Signed-to-unsigned and unsigned-to-signed preprocessing
-- [x] Exact reproduction of the primary paper's 15-sample worked example
-- [x] Independent reference-state construction
-- [x] State-fidelity validation
-- [x] Logical preparation-protocol comparison
-- [x] Validation of the paper's 33 controlled amplitude writes
-- [x] Open/closed-control mapping to Qiskit `mcx`
-- [x] Separation of logical operation counts from transpiled CX counts
-- [x] Reproducible QRDA visual-validation package
-- [x] Logical and transpiled circuit visualization
-- [x] Visual reconstruction and state-support outputs
+### QRDA closure
 
-#### Critical assessment to consolidate in v0.2.2
+No additional QRDA operations are required now.
 
-- [ ] Document the unsigned-amplitude limitation of the QRDA core representation
-- [ ] Document the role and consequences of signed/unsigned offset preprocessing
-- [ ] Consolidate state-preparation scaling findings
-- [ ] Consolidate finite-shot reconstruction requirements
-- [ ] Consolidate noise-sensitivity findings
-- [ ] Consolidate logical-vs-transpiled circuit interpretation
-- [ ] Produce a QRDA suitability assessment for downstream security tasks
-- [ ] Identify which QRDA properties are useful or restrictive for steganography and steganalysis
+Deferred unless a later information-hiding experiment specifically needs them:
 
-#### Deferred unless required by downstream research
+- connection;
+- mixing;
+- DPCM compression;
+- MBE / combined compression;
+- further hardware-oriented experiments.
 
-The following operations are **not mandatory milestones**. They should be implemented only if a later security or medical-imaging experiment requires them.
+The only remaining QRDA task is a concise critical assessment:
 
-- QRDA connection operation
-- QRDA mixing operation
-- QRDA DPCM compression
-- QRDA MBE / combined compression
-- Real-QPU execution and mitigation studies
+- information location;
+- unsigned core amplitude representation;
+- signed/unsigned offset preprocessing;
+- local sample addressability;
+- local controlled modification;
+- reversibility and extraction;
+- circuit overhead;
+- measurement dependence;
+- downstream information-hiding suitability.
 
----
+See `docs/audio/qrda_critical_assessment.md`.
 
-## Phase 2 — Selected quantum-audio representation baselines
+### FRQA — minimal comparison baseline
 
-The goal is **comparison**, not exhaustive reproduction of every published audio representation.
+FRQA is included only as the second audio foundation required to compare direct signed-amplitude handling with QRDA.
 
-### 2. FRQA — prioritized baseline
+Required:
 
-FRQA is prioritized because its signed-amplitude treatment provides a direct comparison point with the unsigned QRDA core.
+- [ ] primary-paper grounding;
+- [ ] amplitude/time register definition;
+- [ ] two's-complement signed-amplitude definition;
+- [ ] minimal independent encoder;
+- [ ] inverse reconstruction;
+- [ ] one validated example;
+- [ ] state validation;
+- [ ] one readable logical-circuit figure;
+- [ ] concise QRDA/FRQA comparison;
+- [ ] local-modification and information-hiding assessment.
 
-- [ ] Review and cite the primary paper
-- [ ] Formalize register and signed-amplitude conventions
-- [ ] Implement a minimal independent encoder
-- [ ] Implement inverse reconstruction
-- [ ] Reproduce at least one published or paper-derived example
-- [ ] Add exact statevector validation
-- [ ] Add shot-based reconstruction validation
-- [ ] Visualize the logical circuit
-- [ ] Compare qubit requirements with QRDA
-- [ ] Compare state-preparation complexity with QRDA
-- [ ] Compare signed-data handling with QRDA
-- [ ] Assess suitability for security-oriented signal modification
+Not required unless downstream research needs them:
 
-### 3. QPAM / SQPAM — selective baseline
+- exhaustive reproduction of FRQA signal operations;
+- large resource-scaling campaigns;
+- separate shot/noise benchmark suites;
+- implementation of every operation from the original paper.
 
-Implement only if probability-amplitude encoding adds meaningful contrast for the later security analysis.
+### Audio stop rule
 
-- [ ] Review and cite the primary papers
-- [ ] Decide whether QPAM, SQPAM, or both are required
-- [ ] Implement the minimum reproducible baseline
-- [ ] Validate decoding and reconstruction
-- [ ] Analyze shot dependence
-- [ ] Compare local sample accessibility with basis-style audio representations
-- [ ] Assess suitability for embedding and steganalysis
-
-### Audio baseline stop rule
-
-A quantum-audio representation is considered sufficiently covered when the repository has:
-
-1. primary-paper grounding;
-2. mathematical/register definition;
-3. minimal independent implementation;
-4. encoding/decoding validation;
-5. at least one reproducible visual circuit;
-6. a small controlled resource or measurement analysis;
-7. a limitations section; and
-8. an explicit security-suitability assessment.
-
-Further paper-specific operations are optional.
+After QRDA and FRQA, no additional audio representation is added unless it contributes a meaningfully different information model required by later research.
 
 ---
 
-## Phase 3 — Selected quantum-image representation foundations
+## Phase 2 — Minimal quantum-image foundations
 
-This phase creates only the image-representation foundation required for later steganography, steganalysis, and medical-image experiments.
+Only the image representations required for information hiding, steganalysis, and medical-imaging research are implemented.
 
-### Priority methods
+### FRQI
 
-- [ ] FRQI
-- [ ] NEQR
-- [ ] QPIE / amplitude encoding only if it adds useful comparison value
+- [ ] primary-paper grounding;
+- [ ] minimal encoder;
+- [ ] small grayscale example;
+- [ ] reconstruction/observable validation;
+- [ ] one representative logical circuit;
+- [ ] pixel-information location analysis;
+- [ ] local-modification assessment.
 
-### Required baseline work
+### NEQR
 
-- [ ] Review and cite primary papers
-- [ ] Formalize position and intensity/color registers
-- [ ] Implement minimal independent encoders
-- [ ] Validate reconstruction on small grayscale images
-- [ ] Add small medical-image examples
-- [ ] Visualize representative circuits
-- [ ] Measure qubit, ancilla, depth, and entangling-gate requirements
-- [ ] Evaluate local pixel/intensity accessibility
-- [ ] Evaluate representation sensitivity to controlled modifications
-- [ ] Document suitability for security-oriented image processing
+- [ ] primary-paper grounding;
+- [ ] minimal encoder;
+- [ ] small grayscale example;
+- [ ] exact intensity reconstruction;
+- [ ] one representative logical circuit;
+- [ ] pixel-addressability analysis;
+- [ ] local-modification assessment.
 
----
+### Image stop rule
 
-## Phase 4 — Representation suitability for quantum multimedia security
-
-This phase is the bridge from published representations to the project's original security research.
-
-### Cross-representation criteria
-
-- [ ] Signed vs unsigned data handling
-- [ ] Location of information: basis value, probability amplitude, phase, or mixed form
-- [ ] Local addressability of samples or pixels
-- [ ] Cost of controlled local modification
-- [ ] Required ancillas
-- [ ] Raw and transpiled circuit depth
-- [ ] Entangling-gate exposure
-- [ ] Measurement and reconstruction cost
-- [ ] Noise sensitivity
-- [ ] Reversibility and extraction fidelity
-- [ ] Payload embedding surfaces
-- [ ] Detectability of embedding-induced changes
-- [ ] Suitability for steganography
-- [ ] Suitability for watermarking
-- [ ] Suitability for steganalysis
-- [ ] Suitability for medical-image integrity constraints
-
-### Main output
-
-- [ ] Reproducible representation-security suitability matrix
-- [ ] Evidence-backed recommendation of representations for downstream experiments
-- [ ] Explicit rejection/deprioritization of unsuitable representation families
+FRQI and NEQR are sufficient as the initial image foundations. Other representations are added only when they provide a necessary capability that these two do not provide.
 
 ---
 
-## Phase 5 — Quantum steganography and watermarking
+## Phase 3 — Representation Suitability Analysis
 
-This phase marks the transition from representation benchmarking to the main secure-multimedia research program.
+This phase is intentionally compact. Its purpose is selection, not another large benchmark campaign.
 
-- [ ] Review selected primary quantum-steganography and watermarking papers
-- [ ] Reproduce a small number of representative baselines
-- [ ] Define cover, payload, embedding, extraction, and attack models
-- [ ] Implement reproducible embedding/extraction pipelines
-- [ ] Measure payload capacity
-- [ ] Measure extraction fidelity
-- [ ] Measure cover/stego state or image distortion
-- [ ] Measure circuit/resource overhead
-- [ ] Evaluate robustness under controlled attacks and noise
-- [ ] Compare representations using identical security tasks
-- [ ] Identify limitations that motivate original embedding methods
+For each selected representation, record:
 
----
+- information location;
+- signed-data handling;
+- sample/pixel addressability;
+- local controlled modification;
+- reversibility;
+- extraction requirements;
+- measurement dependence;
+- circuit overhead;
+- entangling-gate exposure;
+- compatibility with information hiding;
+- compatibility with quantum machine learning;
+- likely value for steganalysis.
 
-## Phase 6 — Quantum steganalysis
+Main output:
 
-This is a primary original-research direction of the repository.
-
-- [ ] Define cover-vs-stego threat models
-- [ ] Build controlled cover/stego datasets
-- [ ] Identify amplitude-, phase-, distribution-, and circuit-sensitive descriptors
-- [ ] Establish classical and quantum-aware baselines
-- [ ] Develop reproducible quantum steganalysis experiments
-- [ ] Evaluate detection accuracy, ROC-AUC, precision/recall, and calibration where appropriate
-- [ ] Perform ablation studies
-- [ ] Evaluate payload-size sensitivity
-- [ ] Evaluate noise and attack sensitivity
-- [ ] Analyze whether representation choice changes steganalysis difficulty
-- [ ] Develop original security-oriented methods only after strong baselines are established
+- [ ] concise representation-suitability matrix;
+- [ ] justified selection of downstream representation(s);
+- [ ] explicit rejection/deferment of representations that add no useful capability.
 
 ---
 
-## Phase 7 — Secure quantum medical imaging
+## Phase 4 — Quantum Information Hiding
 
-Medical imaging is treated as a high-value application domain, not merely another representation demo.
+This is the first major specialist research phase.
 
-- [ ] Encode small controlled medical-image examples
-- [ ] Preserve diagnostically relevant image structure during security operations
-- [ ] Evaluate quantum watermarking/steganography for medical-image integrity and provenance
-- [ ] Evaluate steganalysis on medical-image representations
-- [ ] Measure image fidelity and task-relevant degradation
-- [ ] Evaluate attack and noise robustness
-- [ ] Compare quantum and size-matched classical baselines where meaningful
-- [ ] Separate simulated feasibility from any real-hardware claim
+Scope:
+
+- quantum steganography;
+- quantum watermarking;
+- secure quantum data embedding;
+- reversible payload extraction;
+- representation-aware embedding.
+
+Core tasks:
+
+- [ ] define cover, payload, stego, embedding, and extraction models;
+- [ ] select representation(s) from Phase 3;
+- [ ] reproduce only a small number of relevant baselines;
+- [ ] implement reproducible embedding/extraction pipelines;
+- [ ] measure payload capacity and extraction fidelity;
+- [ ] measure cover/stego distortion;
+- [ ] measure incremental circuit overhead;
+- [ ] evaluate controlled attacks/noise where meaningful;
+- [ ] identify limitations motivating original methods.
 
 ---
 
-## Cross-cutting reproducibility and benchmarking
+## Phase 5 — Quantum Machine Learning for Security-Oriented Signal Analysis
 
-- [x] Reusable resource-scaling utilities
-- [x] Deterministic benchmark profiles and seeds
-- [x] Raw and basis-transpiled circuit metrics
-- [x] QRDA shot-sensitivity baseline
-- [x] QRDA synthetic-noise baseline
-- [x] QRDA calibration-derived hardware-noise baseline
-- [ ] Unified experiment metadata across representation families
-- [ ] Common reconstruction/fidelity metrics
-- [ ] Common security-task metrics
-- [ ] Machine-readable experiment summaries
-- [ ] Reproducible figures for major research milestones
-- [ ] Negative-result and limitation reporting
+QML is introduced only when it serves a concrete signal-security task.
+
+Scope may include quantum feature extraction, quantum kernels, variational classifiers, and QCNN-style models where justified.
+
+Principles:
+
+- [ ] retain classical baselines;
+- [ ] keep model complexity proportionate to data scale;
+- [ ] separate simulation claims from hardware claims;
+- [ ] use ablation and representation-dependence analysis where useful.
+
+---
+
+## Phase 6 — Quantum Steganalysis
+
+This is a primary original-research direction.
+
+- [ ] define cover-vs-stego threat models;
+- [ ] build controlled cover/stego datasets;
+- [ ] identify representation-sensitive observables/descriptors;
+- [ ] establish classical and quantum-aware baselines;
+- [ ] develop QML-based steganalysis experiments;
+- [ ] evaluate accuracy, ROC-AUC, precision, recall, and calibration where appropriate;
+- [ ] perform ablation studies;
+- [ ] evaluate payload-size, representation, and noise sensitivity;
+- [ ] develop original methods after strong baselines are established.
+
+---
+
+## Phase 7 — Secure Quantum Medical Imaging
+
+Medical imaging is treated as an application domain for the mature information-hiding and steganalysis framework.
+
+- [ ] encode small controlled medical-image examples;
+- [ ] preserve diagnostically relevant structure;
+- [ ] evaluate integrity/provenance watermarking;
+- [ ] evaluate secure information hiding and steganalysis;
+- [ ] measure image fidelity and task-relevant degradation;
+- [ ] evaluate controlled robustness;
+- [ ] compare with appropriate classical baselines;
+- [ ] separate simulated feasibility from real-hardware claims.
 
 ---
 
 ## Release targets
 
-- **v0.1:** Unsigned amplitude/time audio foundation
-- **v0.1.1:** Controlled resource-scaling benchmark
-- **v0.1.2:** Shot-sensitivity and full-coverage benchmark
-- **v0.1.3:** Controlled synthetic-noise benchmark
-- **v0.1.4:** Calibration-derived hardware-noise benchmark
-- **v0.2:** QRDA state-representation formalization
-- **v0.2.1:** Complete QRDA $2^l$-box core, primary-paper validation, and visual validation
-- **v0.2.2:** QRDA limitations and security-suitability assessment
-- **v0.3:** FRQA baseline and signed-audio comparison
-- **v0.4:** Selected quantum-image representation baselines, prioritizing FRQI and NEQR
-- **v0.5:** Cross-representation security-suitability benchmark
-- **v0.6:** Quantum steganography / watermarking baselines
-- **v0.7:** Quantum steganalysis baseline and research framework
-- **v0.8:** Secure quantum medical-image experiments
-
----
+- **v0.2.1** — QRDA validated baseline ✅
+- **v0.2.2** — Concise QRDA critical assessment
+- **v0.3** — Minimal FRQA baseline + QRDA/FRQA comparison
+- **v0.4** — Minimal FRQI + NEQR image foundations
+- **v0.5** — Representation Suitability Matrix
+- **v0.6** — Quantum Information Hiding baselines
+- **v0.7** — Quantum Machine Learning for security-oriented signal analysis
+- **v0.8** — Quantum Steganalysis framework
+- **v0.9** — Secure Quantum Medical Imaging experiments
 
 ## What is explicitly not a goal
 
-This repository is **not** intended to:
+This repository is not intended to:
 
-- implement every operation from every quantum signal-representation paper;
-- reproduce every representation proposed in the literature;
-- maximize circuit count for its own sake;
-- imply that simulator success demonstrates hardware feasibility;
+- implement every quantum audio or image representation;
+- reproduce every operation in every representation paper;
+- create large benchmark suites when concise validation is sufficient;
+- treat representation engineering as the final research contribution;
+- imply hardware feasibility from ideal simulation;
 - claim quantum advantage without controlled evidence.
 
-The representation layers exist to support the central research question:
-
-> **Which quantum signal and image representations provide a scientifically defensible foundation for secure quantum multimedia processing, especially steganography, steganalysis, and medical-image security?**
+> **Central question:** Which quantum information representations and processing strategies provide the most defensible foundation for information hiding, quantum machine learning, steganalysis, and secure medical imaging?
