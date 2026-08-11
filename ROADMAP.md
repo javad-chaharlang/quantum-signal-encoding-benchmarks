@@ -38,17 +38,7 @@ Deferred unless a later information-hiding experiment specifically needs them:
 - MBE / combined compression;
 - further hardware-oriented experiments.
 
-The only remaining QRDA task is a concise critical assessment:
-
-- information location;
-- unsigned core amplitude representation;
-- signed/unsigned offset preprocessing;
-- local sample addressability;
-- local controlled modification;
-- reversibility and extraction;
-- circuit overhead;
-- measurement dependence;
-- downstream information-hiding suitability.
+The QRDA baseline and its concise critical assessment are complete.
 
 See `docs/audio/qrda_critical_assessment.md`.
 
@@ -58,16 +48,16 @@ FRQA is included only as the second audio foundation required to compare direct 
 
 Required:
 
-- [ ] primary-paper grounding;
-- [ ] amplitude/time register definition;
-- [ ] two's-complement signed-amplitude definition;
-- [ ] minimal independent encoder;
-- [ ] inverse reconstruction;
-- [ ] one validated example;
-- [ ] state validation;
-- [ ] one readable logical-circuit figure;
-- [ ] concise QRDA/FRQA comparison;
-- [ ] local-modification and information-hiding assessment.
+- [x] primary-paper grounding;
+- [x] amplitude/time register definition;
+- [x] two's-complement signed-amplitude definition;
+- [x] minimal independent encoder;
+- [x] inverse reconstruction;
+- [x] one validated example;
+- [x] state validation;
+- [x] one readable logical-circuit figure;
+- [x] concise QRDA/FRQA comparison;
+- [x] local-modification and information-hiding assessment.
 
 Not required unless downstream research needs them:
 
@@ -88,7 +78,7 @@ Only the image representations required for information hiding, steganalysis, an
 
 ### FRQI
 
-- [ ] primary-paper grounding;
+- [x] primary-paper grounding;
 - [ ] minimal encoder;
 - [ ] small grayscale example;
 - [ ] reconstruction/observable validation;
@@ -98,7 +88,7 @@ Only the image representations required for information hiding, steganalysis, an
 
 ### NEQR
 
-- [ ] primary-paper grounding;
+- [x] primary-paper grounding;
 - [ ] minimal encoder;
 - [ ] small grayscale example;
 - [ ] exact intensity reconstruction;
