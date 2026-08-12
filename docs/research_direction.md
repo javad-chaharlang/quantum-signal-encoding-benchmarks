@@ -6,7 +6,7 @@ The repository is evolving from a collection of reproducible quantum signal-enco
 
 The central trajectory is:
 
-**validated representation → critical suitability analysis → quantum steganography/watermarking → quantum steganalysis → secure quantum medical imaging**
+**validated representations → representation suitability → quantum information hiding → quantum machine learning → quantum steganalysis → secure quantum medical imaging**
 
 Published representations remain essential, but they serve as **validated baselines and experimental substrates**, not as the final research objective.
 
@@ -102,42 +102,57 @@ If the answer is mostly no, the representation can be documented without becomin
 
 ### A. Selected audio baselines
 
-FRQA is the next priority because its signed-amplitude treatment provides a direct comparison with QRDA.
+The audio foundation is intentionally comparison-driven.
 
-QPAM/SQPAM are secondary and should be implemented only if probability-amplitude encoding provides meaningful contrast for security analysis.
+- **QRDA** establishes the unsigned sample-addressed baseline.
+- **FRQA** establishes direct signed-integer amplitude semantics.
+- **QRDS** adds signed fixed-point fractional semantics.
+- **QRMA** adds explicit multichannel addressability.
+- **CQRDS** is planned to combine multichannel addressing with fixed-point fractional amplitudes.
+- **PMQA** is planned to provide a probability/angle-encoded multichannel contrast.
 
-### B. Selected image baselines
+These representations are not implemented exhaustively. Each one is stopped once it provides the evidence needed for downstream selection.
 
-FRQI and NEQR are prioritized to create the foundation required for image-based security experiments. Other image representations are included only when they add a distinct property needed for comparison.
+### B. Audio representation-suitability analysis
 
-### C. Representation-security suitability
+The selected audio methods will be compared using security-relevant criteria including:
 
-Audio and image methods will be compared using security-relevant criteria such as:
-
-- signed/unsigned handling;
-- basis/amplitude/phase information location;
-- local addressability;
-- controlled modification cost;
-- ancilla requirements;
-- depth and entangling gates;
-- measurement cost;
-- noise sensitivity;
+- information location;
+- signed-data handling;
+- fractional precision;
+- channel and sample addressability;
+- local controlled modification;
 - reversibility;
-- payload embedding options;
-- embedding detectability;
-- medical-image fidelity constraints.
+- extraction requirements;
+- measurement dependence;
+- logical/transpiled circuit overhead;
+- entangling-gate exposure;
+- candidate embedding surfaces;
+- likely value for watermarking, steganography, and steganalysis.
 
-### D. Quantum steganography and watermarking
+The output is a concise suitability matrix and a justified selection of representations for downstream information-hiding work.
 
-The project will reproduce a small number of representative published methods, then use those baselines to identify limitations and motivate original secure-embedding research.
+### C. Selected image baselines
 
-### E. Quantum steganalysis
+FRQI and NEQR remain the initial image foundations required for image-security and medical-imaging research. Other image representations are added only if they contribute a capability not already captured by these baselines.
 
-Steganalysis is a central research direction. The project will study whether hidden quantum modifications can be detected from state-, measurement-, phase-, distribution-, or circuit-sensitive evidence and how detection difficulty changes across representations.
+### D. Quantum information hiding
+
+The project will reproduce only a small number of representative watermarking/steganography baselines, then use validated representation properties to design controlled embedding and extraction experiments.
+
+Evaluation will separate payload capacity, extraction fidelity, cover/stego distortion, incremental quantum-circuit overhead, and robustness/security claims.
+
+### E. Quantum machine learning and steganalysis
+
+QML is introduced only for concrete security-oriented signal-analysis tasks.
+
+Quantum steganalysis is a central research direction. The project will study whether hidden modifications can be detected from representation-sensitive state, measurement, phase, distribution, or circuit evidence and will retain appropriate classical baselines.
 
 ### F. Secure quantum medical imaging
 
-Medical images provide a high-value application domain where security operations must be evaluated together with image fidelity and preservation of diagnostically relevant information.
+Medical imaging is treated as a later application domain for the mature representation, information-hiding, and steganalysis framework.
+
+Security operations must be evaluated together with image fidelity, preservation of diagnostically relevant structure, and clear separation between simulator feasibility and real-hardware evidence.
 
 ## Scientific claim policy
 

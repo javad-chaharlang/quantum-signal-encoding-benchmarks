@@ -66,9 +66,81 @@ Not required unless downstream research needs them:
 - separate shot/noise benchmark suites;
 - implementation of every operation from the original paper.
 
+### QRDS — completed fixed-point comparison baseline
+
+QRDS was added because it contributes a meaningfully different information model: signed **fixed-point fractional** amplitude semantics.
+
+Completed:
+
+- [x] primary-paper grounding;
+- [x] signed fixed-point two's-complement definition;
+- [x] paper-aligned representable-range validation;
+- [x] minimal encoder and decoder;
+- [x] exact-state validation;
+- [x] shot-based reconstruction;
+- [x] local fractional modification;
+- [x] logical and transpiled resource characterization;
+- [x] controlled FRQA/QRDS equivalence regression tests;
+- [x] methodology and critical assessment.
+
+Key validated interpretation:
+
+`QRDS(x, f)` and `FRQA(2^f x)` can produce identical computational-basis preparation under controlled matching conditions, while QRDS contributes explicit fixed-point semantics and fractional bit-plane meaning.
+
+No additional QRDS arithmetic is required unless downstream information-hiding experiments need it.
+
+### QRMA — current multichannel baseline
+
+QRMA is justified because it adds a distinct **channel register** and therefore explicit multichannel addressability.
+
+Required:
+
+- [ ] primary-paper grounding;
+- [ ] amplitude/channel/time register definition;
+- [ ] signed two's-complement amplitude definition;
+- [ ] minimal multichannel encoder;
+- [ ] inverse reconstruction;
+- [ ] one validated primary-paper or paper-faithful example;
+- [ ] exact-state validation;
+- [ ] local `(channel, time)` modification assessment;
+- [ ] logical/transpiled resource characterization;
+- [ ] controlled comparison with FRQA to isolate channel-register overhead;
+- [ ] concise critical assessment.
+
+Not required unless downstream work needs them:
+
+- exhaustive reproduction of QRMA signal operations;
+- large scaling campaigns;
+- broad noise/hardware campaigns;
+- implementation of every operation from the paper.
+
+### CQRDS — planned multichannel fixed-point comparison
+
+CQRDS is retained because it combines the multichannel register structure with signed fixed-point fractional amplitudes.
+
+The focused question is whether explicit fractional bit planes in a multichannel representation provide a more useful embedding surface than QRMA's integer amplitude words.
+
+Implementation should remain minimal and comparison-driven.
+
+### PMQA — planned probability/angle multichannel comparison
+
+PMQA is retained because it places amplitude information in an angle/probability mechanism rather than a multi-qubit basis-value word.
+
+The focused question is how this changes qubit count, reconstruction/measurement requirements, local modification semantics, and information-hiding suitability.
+
 ### Audio stop rule
 
-After QRDA and FRQA, no additional audio representation is added unless it contributes a meaningfully different information model required by later research.
+No audio representation is added merely for completeness.
+
+An additional representation is implemented only when it contributes a distinct information model required for later research, such as:
+
+- signed versus unsigned amplitude semantics;
+- integer versus fixed-point precision;
+- single-channel versus multichannel addressability;
+- basis-value versus probability/angle information placement.
+
+After QRMA, CQRDS, and PMQA provide the required comparative evidence, the project moves to representation-suitability analysis rather than continuing a representation catalog.
+
 
 ---
 
@@ -204,14 +276,17 @@ Medical imaging is treated as an application domain for the mature information-h
 ## Release targets
 
 - **v0.2.1** — QRDA validated baseline ✅
-- **v0.2.2** — Concise QRDA critical assessment
-- **v0.3** — Minimal FRQA baseline + QRDA/FRQA comparison
-- **v0.4** — Minimal FRQI + NEQR image foundations
-- **v0.5** — Representation Suitability Matrix
-- **v0.6** — Quantum Information Hiding baselines
-- **v0.7** — Quantum Machine Learning for security-oriented signal analysis
-- **v0.8** — Quantum Steganalysis framework
-- **v0.9** — Secure Quantum Medical Imaging experiments
+- **v0.3.0** — Validated FRQA baseline ✅
+- **main after v0.3.0** — QRDS validated fixed-point baseline ✅
+- **v0.4.0** — Extended quantum-audio foundations: QRDS + QRMA
+- **v0.5.0** — CQRDS + PMQA + audio representation-suitability matrix
+- **v0.6.0** — Minimal FRQI + NEQR image foundations
+- **v0.7.0** — Cross-modal representation suitability + information-hiding baselines
+- **v0.8.0** — QML for security-oriented signal analysis
+- **v0.9.0** — Quantum steganalysis framework
+- **v1.0.0** — Secure quantum medical-imaging experiments
+
+Release numbers describe tagged repository milestones. Work merged into `main` after the latest tag is development state until a new release is explicitly created.
 
 ## What is explicitly not a goal
 

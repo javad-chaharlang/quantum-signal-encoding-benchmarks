@@ -12,104 +12,66 @@ A reproducible research repository for implementing and benchmarking **quantum r
 
 ## Research direction
 
-This repository is **not intended to become an exhaustive collection of quantum signal-representation implementations**. Published audio and image representations are treated as validated research baselines: they are reproduced, tested, visualized, and critically assessed only to the depth needed to support the project's main trajectory.
+This repository is **not intended to become an exhaustive collection of quantum signal-representation implementations**. Published representations are treated as validated research baselines and are implemented only to the depth required for downstream research.
 
-The current research path is:
+The current research trajectory is:
 
-**validated representations → critical security-suitability analysis → quantum steganography/watermarking → quantum steganalysis → secure quantum medical imaging**
+**validated representations → representation suitability → quantum information hiding → quantum machine learning → quantum steganalysis → secure quantum medical imaging**
 
-QRDA is the first completed baseline. Operations such as QRDA connection, mixing, and compression are no longer mandatory roadmap milestones; they will be implemented only if a downstream security or medical-imaging experiment requires them.
+The validated audio sequence now includes:
 
-The next representation work therefore prioritizes **FRQA for signed-audio comparison**, followed by selected quantum-image baselines such as **FRQI and NEQR**, before moving into representation suitability for secure quantum multimedia.
+- **QRDA** — completed unsigned/sample-addressed baseline;
+- **FRQA** — completed direct signed-integer baseline and released in v0.3.0;
+- **QRDS** — completed signed fixed-point baseline, merged into `main` after v0.3.0;
+- **QRMA** — current multichannel signed-integer development target;
+- **CQRDS** — planned multichannel signed fixed-point comparison;
+- **PMQA** — planned probability/angle-encoded multichannel comparison.
+
+The purpose of this sequence is not to accumulate representations. Each additional method must contribute a meaningfully different information model needed for later security-oriented experiments.
+
+Current comparison questions include signed versus unsigned amplitude semantics, integer versus fixed-point precision, single-channel versus multichannel addressability, and basis-value versus probability/angle information placement.
+
+Selected image representations such as FRQI and NEQR remain part of the roadmap for later image-security and medical-imaging work, but the current development branch is completing the audio representation set required for a defensible representation-suitability analysis.
 
 See:
 
-- [`ROADMAP.md`](ROADMAP.md) for the updated milestone structure
-- [`docs/research_direction.md`](docs/research_direction.md) for the scientific scope and decision rules
-- [`docs/linkedin_research_series.md`](docs/linkedin_research_series.md) for the evidence-based research communication plan
+- [`ROADMAP.md`](ROADMAP.md) for the milestone structure;
+- [`docs/research_direction.md`](docs/research_direction.md) for the scientific scope and decision rules;
+- [`docs/linkedin_research_series.md`](docs/linkedin_research_series.md) for the evidence-based research communication plan.
 
-## Current release: v0.2.1
+## Current release: v0.3.0
 
-Version 0.2.1 completes the repository's **primary-paper validation of QRDA** and extends the encoder from the earlier power-of-two case to the full QRDA $2^l$-box construction for arbitrary positive signal lengths.
+The latest formal GitHub release is **v0.3.0 — Validated FRQA Baseline**.
 
-For an effective signal of length $L$, the QRDA time-register width is
+Version 0.3.0 extends the repository beyond the QRDA baseline by adding a validated FRQA implementation with direct signed two's-complement amplitudes, exact-state validation, shot-based reconstruction, local sample-modification testing, logical-circuit assets, documentation, and repository-level QA.
 
-```math
-l=
-\begin{cases}
-\lceil \log_2 L\rceil, & L>1,\\
-1, & L=1.
-\end{cases}
-```
+### Current development status
 
-The complete encoded state is
+| Representation | Status | Role |
+|---|---|---|
+| QRDA | ✅ completed | unsigned sample-addressed audio baseline |
+| FRQA | ✅ released in v0.3.0 | direct signed-integer audio baseline |
+| QRDS | ✅ merged after v0.3.0 | signed fixed-point / fractional baseline |
+| QRMA | 🚧 current development | multichannel signed-integer baseline |
+| CQRDS | ⏳ planned | multichannel signed fixed-point comparison |
+| PMQA | ⏳ planned | multichannel probability/angle comparison |
 
-```math
-\left|B\right\rangle
-=
-\frac{1}{\sqrt{2^l}}
-\left(
-\sum_{t=0}^{L-1}
-\left|S_t\right\rangle_{\mathrm{amp}}
-\otimes
-\left|t\right\rangle_{\mathrm{time}}
-+
-\sum_{t=L}^{2^l-1}
-\left|0\right\rangle^{\otimes m}_{\mathrm{amp}}
-\otimes
-\left|t\right\rangle_{\mathrm{time}}
-\right),
-```
+QRDS is already present on `main`, but it is **not yet part of a tagged release**. The package version therefore remains `0.3.0` until the next release milestone is deliberately cut.
 
-where:
+The next planned release milestone is expected to consolidate the extended quantum-audio foundations rather than pretending that unreleased `main` work is already part of v0.3.0.
 
-- $L$ is the number of effective audio samples;
-- $m$ is the number of qubits in the amplitude register;
-- $l$ is the number of qubits in the time register;
-- $S_t$ is the unsigned quantized amplitude associated with effective time index $t$;
-- $2^l-L$ is the number of redundant QRDA box positions.
+### v0.3.0 highlights
 
-The encoder accepts unsigned quantized amplitudes in the range
+- validated FRQA signed-amplitude encoding;
+- reusable FRQA public API;
+- exact computational-basis support validation;
+- shot-based round-trip reconstruction;
+- local sample-modification regression tests;
+- FRQA logical-circuit PNG/PDF assets;
+- methodology and critical-assessment documentation;
+- package build and release artifacts.
 
-```math
-0 \leq S_t \leq 2^m-1.
-```
-
-For a signed $m$-bit sample $x_t$, the repository provides explicit preprocessing helpers implementing
-
-```math
-S_t=x_t+2^{m-1},
-```
-
-with inverse reconstruction
-
-```math
-x_t=S_t-2^{m-1}.
-```
-
-The encoder itself remains unsigned; signed/unsigned translation is a separate, validated preprocessing layer.
-
-### Included in v0.2.1
-
-- Full arbitrary-length QRDA $2^l$-box support
-- Explicit `box_size`, `padding_count`, and `padding_fraction` metadata
-- Correct $L=1$ handling with one time qubit
-- Validated signed-to-unsigned and unsigned-to-signed audio translation
-- Exact reproduction of the primary paper's 15-sample, 4-bit worked example
-- 8-qubit paper-example circuit: 4 amplitude qubits + 4 time qubits
-- One redundant QRDA box state at $T=15$ with amplitude zero
-- Independently constructed reference state with fidelity 1.0
-- Exact logical controlled-write count of 33, matching the paper
-- Explicit mapping from open/closed controls to Qiskit `X`-conjugated `mcx`
-- Exact unsigned and signed shot-based round-trip reconstruction
-- Machine-readable validation and circuit-metric outputs
-- Backward-compatible legacy basis-encoding API
-- Existing resource, shot, synthetic-noise, and calibration-derived hardware-noise benchmarks
-- Unit tests and continuous integration
-
-### Primary QRDA reference
-
-Wang, J. (2016). QRDA: Quantum Representation of Digital Audio. *International Journal of Theoretical Physics, 55*, 1622–1641. https://doi.org/10.1007/s10773-015-2800-2
+The release baseline should be distinguished from the newer development state of `main`.
 
 ## QRDA API
 
