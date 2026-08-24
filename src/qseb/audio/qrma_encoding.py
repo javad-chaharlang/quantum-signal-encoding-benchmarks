@@ -1,7 +1,13 @@
-"""Minimal QRMA multichannel audio baseline."""
+"""QRMA v0.2 state preparation baseline.
+
+Backward compatible version:
+- keeps build_qrma_circuit() from v0.1
+- adds state preparation helpers from v0.2
+"""
 
 from dataclasses import dataclass
 from math import ceil, log2
+
 from qiskit import QuantumCircuit, QuantumRegister
 from qiskit.quantum_info import Statevector
 
@@ -33,11 +39,11 @@ def decode_twos(code, bits):
     return code - (1 << bits) if code & (1 << (bits - 1)) else code
 
 
-def build_qrma_circuit(audio, amplitude_bits=3):
+def prepare_qrma_state(audio, amplitude_bits=3):
     spec = QRMAEncodingSpec(
         len(audio),
         len(audio[0]),
-        amplitude_bits,
+        amplitude_bits
     )
 
     amp = QuantumRegister(spec.amplitude_bits, "amplitude")
@@ -49,7 +55,45 @@ def build_qrma_circuit(audio, amplitude_bits=3):
     circuit.h(ch)
     circuit.h(tm)
 
+    encoded = {
+        (c, t): encode_twos(audio[c][t], amplitude_bits)
+        for c in range(spec.channels)
+        for t in range(spec.samples_per_channel)
+    }
+
+    return circuit, spec, encoded
+
+
+def build_qrma_circuit(audio, amplitude_bits=3):
+    """
+    Backward-compatible API from QRMA v0.1.
+    """
+    circuit, spec, _ = prepare_qrma_state(
+        audio,
+        amplitude_bits
+    )
     return circuit, spec
+
+
+def decode_qrma_samples(audio_map, spec):
+    result = [
+        [0 for _ in range(spec.samples_per_channel)]
+        for _ in range(spec.channels)
+    ]
+
+    for (c, t), value in audio_map.items():
+        result[c][t] = decode_twos(
+            value,
+            spec.amplitude_bits
+        )
+
+    return result
+
+
+def modify_qrma_sample(audio_map, channel, time, value, bits=3):
+    updated = dict(audio_map)
+    updated[(channel, time)] = encode_twos(value, bits)
+    return updated
 
 
 def validate_state(circuit):
